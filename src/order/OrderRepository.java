@@ -1,8 +1,12 @@
+package order;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import util.DatabaseConnection;
+
 
 public class OrderRepository {
     public ArrayList<Order> getAllOrdersbyCustomerId(int customerId) throws SQLException {

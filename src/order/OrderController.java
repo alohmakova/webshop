@@ -1,4 +1,5 @@
-import java.sql.SQLException;
+package order;
+
 import java.util.Scanner;
 
 public class OrderController {

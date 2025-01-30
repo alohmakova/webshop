@@ -1,5 +1,8 @@
+package customer;
+
 import java.sql.*;
 import java.util.ArrayList;
+import util.DatabaseConnection;
 
 /**
  * Applikationen ska struktureras i tre huvudsakliga lager:

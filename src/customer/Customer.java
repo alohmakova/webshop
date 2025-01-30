@@ -1,3 +1,5 @@
+package customer;
+
 /**
  * Klass som representerar en kund i webbshopen
  * Används för att hantera kunddata mellan databasen och applikationen
