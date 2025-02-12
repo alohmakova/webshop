@@ -1,15 +1,14 @@
 package order;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import util.DatabaseConnection;
 
 
 public class OrderRepository {
-    public ArrayList<Order> getAllOrdersbyCustomerId(int customerId) throws SQLException {
+
+    //show the history of orders
+    /*public ArrayList<Order> getAllOrdersbyCustomerId(int customerId) throws SQLException {
         ArrayList<Order> ordersByCustomerId = new ArrayList<>();
 
 
@@ -23,12 +22,51 @@ public class OrderRepository {
                 Order order = new Order(
                         rs.getInt("order_id"),
                         rs.getInt("customer_id"),
-                        rs.getDate("order_date"),
+                        rs.getString("order_date"),
                         rs.getDouble("total_amount")
                 );
                 ordersByCustomerId.add(order);
             }
         }
         return ordersByCustomerId;
+    }*/
+    //I am changing Statement to PreparedStatement
+    public ArrayList<Order> getAllOrdersbyCustomerId(int customerId) throws SQLException {
+        ArrayList<Order> ordersByCustomerId = new ArrayList<>();
+        String query = "SELECT * FROM orders WHERE customer_id = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, customerId); // Set the query parameter (?)
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    Order order = new Order(
+                            rs.getInt("order_id"),
+                            rs.getInt("customer_id"),
+                            rs.getString("order_date")
+                    );
+                    ordersByCustomerId.add(order);
+                }
+            }
+        }
+        return ordersByCustomerId;
     }
+
+
+
+    public int getMaxOrderId() throws SQLException {
+             try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT MAX(order_id) FROM orders")) {
+                 if (rs.next()) {
+                     return rs.getInt(1);
+                 }
+        }
+        return -1;
+    }
+
+    //send the order to the DB
+
 }

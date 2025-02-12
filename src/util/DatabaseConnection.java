@@ -11,7 +11,7 @@ import java.sql.SQLException;
  */
 public class DatabaseConnection {
 
-    private static final String URL = "jdbc:sqlite:resources/webshop.db";//URL till SQLite-databasen
+    private static final String URL = "jdbc:sqlite:resources/webbutiken.db";//database was changed
 
     /**
      * Gets a connection to the database.

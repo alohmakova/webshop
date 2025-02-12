@@ -42,20 +42,39 @@ public class CustomerRepository {
         return customers;
     }
 
+    //I am changing Statement to PreparedStatement
+    /*public int getCustomerIdByEmail(String email) throws SQLException {
+        try (Connection conn = DatabaseConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery("SELECT customer_id FROM customers WHERE email = '" + email + "'")) {
+            if (rs.next()) {
+                int customerId = rs.getInt("customer_id");
+                return customerId;
 
-    /**
-     * Här kan fler metoder läggas till som t.ex:
-     * - addCustomer
-     * - getCustomerById
-     * - updateCustomer
-     * - deleteCustomer
-     * - findCustomerByEmail
-     *
-     * Varje metod kommer följa samma mönster:
-     * 1. Skapa Connection med DriverManager.getConnection(URL)
-     * 2. Skapa Statement eller PreparedStatement
-     * 3. Utför databasoperationen
-     * 4. Hantera resultatet
-     * 5. Låt try-with-resources stänga alla resurser
-     */
+            }
+        }
+        //System.out.println(-1);
+        return -1;
+    }*/
+    public int getCustomerIdByEmail(String email) throws SQLException {
+        //it is impossible to get multiple IDs with the same email, because email is unique in database
+
+        String query = "SELECT customer_id FROM customers WHERE email = ?";
+
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, email); // Set the query parameter (?)
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    int customerId = rs.getInt("customer_id");
+                    return customerId;
+
+                }
+            }
+        }
+        return -1;
+    }
 }

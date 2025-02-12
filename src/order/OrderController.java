@@ -1,6 +1,9 @@
 package order;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
+
 
 public class OrderController {
     //create a menu
@@ -35,12 +38,26 @@ public class OrderController {
                 // Hantera användarens val
                 switch (select) {
                     case 1:
-                        orderService.createNewOrder();// not implemented
+                        //email is needed to get the id of the customer
+                        System.out.println("Provide your email to log in");//validation and error handling, if that email is not in the database, if the format is wrong
+                        String email = scanner.next();
+
+                        //category+product+quantity is required to calculate the order price
+                        //System.out.println("Choose product category");//validation and error handling
+                        //String productCategory = scanner.next();
+                        //System.out.println("Choose the product and its amount");//validation and error handling
+                        //multiple products can be selected at once and at the same time that amounts can be selected
+                        //order confirmation
+                        //order created
+
+                        //the order is created as an object and then this object still needs to be saved in the database
+                        //order id and date are created automatically
+                        orderService.createNewOrder(email);//email validation required
                         break;
                     case 2:
-                        System.out.println("Enter customer's id: ");//it can be changed to enter customer's name. Need to write method to get id by name
+                        System.out.println("Enter customer's id: ");//it can be changed to enter customer's name/email
                         int customerId = scanner.nextInt();
-                        orderService.showAllCustomersOrdersById(customerId);// not implemented
+                        orderService.showAllCustomersOrdersById(customerId);
                         break;
                     case 3:
                         System.out.println("Avslutar kundhantering...");
@@ -49,9 +66,9 @@ public class OrderController {
                         System.out.println("Ogiltigt val, försök igen");
                 }
             } catch (Exception e) {
-                // Hantera övriga fel (t.ex. felaktig input)
+                // Handle other errors (e.g. incorrect input)
                 System.out.println("Ett oväntat fel uppstod: " + e.getMessage());
-                scanner.nextLine(); // Rensa scanner-bufferten vid felinmatning
+                scanner.nextLine();
             }
         }
     }
