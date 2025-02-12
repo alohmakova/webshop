@@ -19,14 +19,13 @@ public class OrderService {
         System.out.println(orderRepository.getAllOrdersbyCustomerId(customerId));
 
     }
-    public void createNewOrder(String email) throws SQLException {
-        CustomerRepository customerRepository = new CustomerRepository();
-        //orderId is created automatically, need to know which id is the last, use getMaxOrderId() from OrderRepository class
-        //customerId need to know who is customer, maybe, need to log in. Use getCustomerIdByEmail from CustomerRepository class
-        //orderDate = current date and time
-        Order order = new Order(orderRepository.getMaxOrderId()+1, customerRepository.getCustomerIdByEmail(email));
-        System.out.println(order);
 
+        public void createNewOrder(String email) throws SQLException {
+        CustomerRepository customerRepository = new CustomerRepository();
+        Order order = new Order(orderRepository.getMaxOrderId()+1, customerRepository.getCustomerIdByEmail(email));
+        //save new order in the database
+        orderRepository.addOrder(order);
+        System.out.println("Thank you! Your order №" + order.getOrderNumber() +" has been successfully created");
     }
 
 

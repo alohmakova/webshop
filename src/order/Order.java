@@ -26,7 +26,6 @@ public class Order {
         this.orderNumber = orderNumber;
         this.customerId = customerId;
         this.orderDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//orderDate - current date and time
-        this.totalAmount = 0;
     }
 
     //method to set the current time for orderDate, do not use it, because put it directly in the constructor

@@ -54,9 +54,8 @@ public class OrderRepository {
         return ordersByCustomerId;
     }
 
-
-
-    public int getMaxOrderId() throws SQLException {
+    
+        public int getMaxOrderId() throws SQLException {
              try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery("SELECT MAX(order_id) FROM orders")) {
@@ -68,5 +67,15 @@ public class OrderRepository {
     }
 
     //send the order to the DB
+    public void addOrder(Order order) throws SQLException {
+        String query = "INSERT INTO orders (order_id, customer_id, order_date) VALUES (?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)){
+            pstmt.setInt(1, order.getOrderNumber());
+            pstmt.setInt(2, order.getCustomerId());
+            pstmt.setString(3, order.getOrderDate());
+            pstmt.executeUpdate();
+        }
+    }
 
 }
