@@ -1,5 +1,7 @@
 package order;
 
+import category.CategoryService;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -9,12 +11,14 @@ public class OrderController {
     //create a menu
 
     OrderService orderService;
+    //I use some methods from CategoryService class to get and show the info about product categories to create the order
+    CategoryService categoryService;
     Scanner scanner;
 
-    //constructor for OrderController initialises service and scanner
-
+    //constructor for OrderController initialises services and scanner
     public OrderController() {
         this.orderService = new OrderService();
+        this.categoryService = new CategoryService();
         this.scanner = new Scanner(System.in);
     }
 
@@ -38,6 +42,10 @@ public class OrderController {
                 // Hantera användarens val
                 switch (select) {
                     case 1:
+                        //I use the categoryId to choose the product
+                        categoryService.showAllCategoriesAsATable();//show all categories to the customer to choose
+                        System.out.println("To create an order choose the product category (type the categoryId): \n");
+                        int categoryId = scanner.nextInt();//categoryId validation required
                         //email is needed to get the id of the customer
                         System.out.println("Provide your email to log in");//validation and error handling, if that email is not in the database, if the format is wrong
                         String email = scanner.next();

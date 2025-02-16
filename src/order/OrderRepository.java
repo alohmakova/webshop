@@ -54,7 +54,7 @@ public class OrderRepository {
         return ordersByCustomerId;
     }
 
-    
+
         public int getMaxOrderId() throws SQLException {
              try (Connection conn = DatabaseConnection.getConnection();
              Statement stmt = conn.createStatement();
