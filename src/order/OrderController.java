@@ -1,6 +1,7 @@
 package order;
 
 import category.CategoryService;
+import product.ProductService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,12 +14,15 @@ public class OrderController {
     OrderService orderService;
     //I use some methods from CategoryService class to get and show the info about product categories to create the order
     CategoryService categoryService;
+    //I use some methods from ProductService class to get and show the info about products to create the order
+    ProductService productService;
     Scanner scanner;
 
     //constructor for OrderController initialises services and scanner
     public OrderController() {
         this.orderService = new OrderService();
         this.categoryService = new CategoryService();
+        this.productService = new ProductService();
         this.scanner = new Scanner(System.in);
     }
 
@@ -46,6 +50,10 @@ public class OrderController {
                         categoryService.showAllCategoriesAsATable();//show all categories to the customer to choose
                         System.out.println("To create an order choose the product category (type the categoryId): \n");
                         int categoryId = scanner.nextInt();//categoryId validation required
+                        //to create the order it is necessary to choose the product and it's amount
+                        productService.showAllProductsByCaregoryIdAsATable(categoryId);//show all products from the category to choose
+                        //if there is 1 product - ask amount, if there are 2 or more products - ask id and amount
+                        productService.chooseProductAndAmount(categoryId);
                         //email is needed to get the id of the customer
                         System.out.println("Provide your email to log in");//validation and error handling, if that email is not in the database, if the format is wrong
                         String email = scanner.next();
