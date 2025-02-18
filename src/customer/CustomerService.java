@@ -33,25 +33,26 @@ public class CustomerService {
      * @throws SQLException vid problem med databasanrop
      */
     public void showAllUsers() throws SQLException {
-        // Hämta alla kunder från repository-lagret
+        // Get all customers from the repository
         ArrayList<Customer> customers = customerRepository.getAllCustomers();
 
-        // Kontrollera om vi har några kunder att visa
+        // Check if we have any customers to show
         if (customers.isEmpty()) {
             System.out.println("Inga kunder hittades.");
             return;
         }
 
-        // Skriv ut alla kunder med tydlig formatering
+        // Print all customers with clear formatting
         System.out.println("\n=== Kundlista ===");
-        for (Customer customer : customers) {
+        //I'm replacing the traditional for-each loop with a lambda
+        customers.forEach(customer ->
+        {
             System.out.println("ID: " + customer.getCustomerId());
             System.out.println("Namn: " + customer.getFirstName() + " " + customer.getLastName());
             System.out.println("Email: " + customer.getEmail());
             System.out.println("-----------------");
-        }
+        });
     }
-//Här kan man lägga till fler metoder
 
 
 }

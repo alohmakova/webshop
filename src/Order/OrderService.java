@@ -15,7 +15,7 @@ public class OrderService {
         this.orderRepository = new OrderRepository();
     }
 
-    //create methods for menu
+    //Check if we have any orders to show - not implemented
     public void showAllCustomersOrdersById(int customerId) throws SQLException {//need to throw SQLException otherwise it will not work
         System.out.println(orderRepository.getAllOrdersbyCustomerId(customerId));
 
@@ -40,6 +40,8 @@ public class OrderService {
         //show order details to the customer
         showOrderDetailsAsATable(order);
     }
+
+    //Check if we have any orders to show - not implemented
     public void showOrderDetailsAsATable(Order order) throws SQLException {
         StringBuilder sb = new StringBuilder();
         sb.append("+-----------------+---------------------+---------------+------------+------------+\n");
