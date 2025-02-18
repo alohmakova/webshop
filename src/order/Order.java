@@ -11,21 +11,24 @@ public class Order {
     int orderNumber;
     int customerId;
     String orderDate;//I have changed the datatype from Date to String to avoid problems while setting current date and time as orderDate
-    double totalAmount;
+    String productName;
+    int quantity;
+    double totalAmount;//quantity*unit price
 
-    //constructor to get the order from db
-    public Order (int orderNumber, int customerId, String orderDate){
+    public Order (int orderNumber, int customerId, String productName, int quantity, double totalAmount) {
+        this.orderNumber = orderNumber;
+        this.customerId = customerId;
+        this.orderDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));;
+        this.productName = productName;
+        this.quantity = quantity;
+        this.totalAmount = totalAmount;
+    }
+
+    //constructor to show the order with the details only from orders table
+    public Order (int orderNumber, int customerId, String orderDate) {
         this.orderNumber = orderNumber;
         this.customerId = customerId;
         this.orderDate = orderDate;
-        this.totalAmount = 0;
-    }
-
-    //constructor to put the order to db
-    public Order (int orderNumber, int customerId){
-        this.orderNumber = orderNumber;
-        this.customerId = customerId;
-        this.orderDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));//orderDate - current date and time
     }
 
     //method to set the current time for orderDate, do not use it, because put it directly in the constructor
@@ -36,30 +39,55 @@ public class Order {
         return formattedTime;
     }
 
-    //getters
+    //getters and setters
+
     public int getOrderNumber() {
         return orderNumber;
     }
+
+    public void setOrderNumber(int orderNumber) {
+        this.orderNumber = orderNumber;
+    }
+
     public int getCustomerId() {
         return customerId;
     }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
+
     public String getOrderDate() {
         return orderDate;
     }
+
+    public void setOrderDate(String orderDate) {
+        this.orderDate = orderDate;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     public double getTotalAmount() {
         return totalAmount;
     }
 
-    //setters
-    public void setOrderNumber(int orderNumber) {
-        this.orderNumber = orderNumber;
+    public void setTotalAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
     }
-    public void setCustomerId(int customerId) {
-        this.customerId = customerId;
-    }
-    public void setOrderDate(String orderDate) {this.orderDate = orderDate;}
-    public void setTotalAmount(double totalAmount) {this.totalAmount = totalAmount;}
-
 
     //to String - think how to represent the information better
     @Override

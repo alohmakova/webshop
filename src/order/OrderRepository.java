@@ -2,6 +2,8 @@ package order;
 
 import java.sql.*;
 import java.util.ArrayList;
+
+import product.Product;
 import util.DatabaseConnection;
 
 
@@ -66,16 +68,28 @@ public class OrderRepository {
         return -1;
     }
 
-    //send the order to the DB
+    //save new order in the database in the orders table
     public void addOrder(Order order) throws SQLException {
-        String query = "INSERT INTO orders (order_id, customer_id, order_date) VALUES (?, ?, ?)";
+        String query = "INSERT INTO orders (customer_id, order_date) VALUES (?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(query)){
-            pstmt.setInt(1, order.getOrderNumber());
-            pstmt.setInt(2, order.getCustomerId());
-            pstmt.setString(3, order.getOrderDate());
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, order.getCustomerId());
+            pstmt.setString(2, order.getOrderDate());
             pstmt.executeUpdate();
         }
     }
 
+    //save info about new order in the database in the orders_products table
+    public void insertIntoOrdersProducts(Order order, Product product) throws SQLException {
+        String query = "INSERT INTO orders_products (order_id, product_id, quantity, unit_price) VALUES (?, ?, ?, ?)";
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+            pstmt.setInt(1, order.orderNumber);
+            pstmt.setInt(2, product.getProductId());
+            pstmt.setInt(3, order.quantity);
+            pstmt.setDouble(4, product.getProductPrice());
+            pstmt.executeUpdate();
+
+        }
+    }
 }

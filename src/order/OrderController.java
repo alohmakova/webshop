@@ -1,6 +1,7 @@
 package order;
 
 import category.CategoryService;
+import product.Product;
 import product.ProductService;
 
 import java.util.ArrayList;
@@ -52,23 +53,27 @@ public class OrderController {
                         int categoryId = scanner.nextInt();//categoryId validation required
                         //to create the order it is necessary to choose the product and it's amount
                         productService.showAllProductsByCaregoryIdAsATable(categoryId);//show all products from the category to choose
-                        //if there is 1 product - ask amount, if there are 2 or more products - ask id and amount
-                        productService.chooseProductAndAmount(categoryId);
-                        //email is needed to get the id of the customer
-                        System.out.println("Provide your email to log in");//validation and error handling, if that email is not in the database, if the format is wrong
-                        String email = scanner.next();
+                        //if there is 1 product in the category - ask amount, if there are 2 or more products - ask id and amount
+                        ArrayList<Product> products = productService.AllProductsByCaregoryIdAsArrayList(categoryId);
+                        if (products.size() == 1) {
+                            //to create the order I need product info
+                            Product product = products.get(0);
+                            //1-take the quantity from user's input, 2-log in or ask at least user's id, 3-create the order, calculating its price (totalAmount)
+                            System.out.println("Enter the quantity: ");
+                            int quantity = scanner.nextInt();//quantity validation required
+                            //new order shoul be created with orderNumber, customerId, orderDate, productName, quantity, totalAmount
+                            //I need email to get customer's id
+                            System.out.println("Provide your email to log in");
+                            String email = scanner.next();//email validation required
+                            orderService.createNewOrder(email, product, quantity);
 
-                        //category+product+quantity is required to calculate the order price
-                        //System.out.println("Choose product category");//validation and error handling
-                        //String productCategory = scanner.next();
-                        //System.out.println("Choose the product and its amount");//validation and error handling
+
+                        }else if (products.size() > 1) {
+                            System.out.println("Enter the product id: ");
+                        }else{
+                            System.out.println("We are sorry, but there are no products in this category");
+                        }
                         //multiple products can be selected at once and at the same time that amounts can be selected
-                        //order confirmation
-                        //order created
-
-                        //the order is created as an object and then this object still needs to be saved in the database
-                        //order id and date are created automatically
-                        orderService.createNewOrder(email);//email validation required
                         break;
                     case 2:
                         System.out.println("Enter customer's id: ");//it can be changed to enter customer's name/email

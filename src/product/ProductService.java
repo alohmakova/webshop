@@ -37,4 +37,8 @@ public class ProductService {
             System.out.println("We are sorry, but there are no products in this category");
         }
     }
+
+    public ArrayList<Product> AllProductsByCaregoryIdAsArrayList(int id) throws SQLException {
+        return productRepository.getProductsbyCategoryId(id);
+    }
 }
