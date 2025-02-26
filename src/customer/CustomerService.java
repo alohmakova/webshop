@@ -48,8 +48,11 @@ public class CustomerService {
         customers.forEach(customer ->
         {
             System.out.println("ID: " + customer.getCustomerId());
-            System.out.println("Namn: " + customer.getFirstName() + " " + customer.getLastName());
+            System.out.println("Namn: " + customer.getName());
             System.out.println("Email: " + customer.getEmail());
+            System.out.println("Phone: " + customer.getPhone());
+            System.out.println("Address: " + customer.getAddress());
+            System.out.println("Password: " + customer.getPassword());
             System.out.println("-----------------");
         });
     }

@@ -35,7 +35,10 @@ public class OrderRepository {
     //I am changing Statement to PreparedStatement
     public ArrayList<Order> getAllOrdersbyCustomerId(int customerId) throws SQLException {
         ArrayList<Order> ordersByCustomerId = new ArrayList<>();
-        String query = "SELECT * FROM orders WHERE customer_id = ?";
+        String query = "select orders.order_id, orders.customer_id, orders.order_date, products.name, products.price, orders_products.quantity from orders " +
+                "join orders_products on orders.order_id = orders_products.order_id " +
+                "join products on orders_products.product_id = products.product_id " +
+                "where customer_id = ?";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -47,7 +50,11 @@ public class OrderRepository {
                     Order order = new Order(
                             rs.getInt("order_id"),
                             rs.getInt("customer_id"),
-                            rs.getString("order_date")
+                            rs.getString("order_date"),
+                            rs.getString("name"),
+                            rs.getInt("quantity"),
+                            rs.getDouble("price")*rs.getInt("quantity")
+
                     );
                     ordersByCustomerId.add(order);
                 }

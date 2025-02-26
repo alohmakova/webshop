@@ -1,26 +1,43 @@
 package order;
 
+import admin.Admin;
 import category.CategoryService;
+import customer.Customer;
+import login.LoginController;
+import login.LoginService;
 import product.Product;
 import product.ProductService;
+import util.User;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 
 public class OrderController {
-    //create a menu
 
+    LoginController loginController;
+    LoginService loginService;
     OrderService orderService;
-    //I use some methods from CategoryService class to get and show the info about product categories to create the order
     CategoryService categoryService;
-    //I use some methods from ProductService class to get and show the info about products to create the order
     ProductService productService;
     Scanner scanner;
 
+    // ANSI colours and formatting
+    final String YELLOW = "\u001B[33m";
+    final String RED = "\u001B[31m";
+    final String BOLD = "\u001B[1m";
+    final String RESET = "\u001B[0m";
+
+    // Unicode symboler
+    final String ATTENTION = "🚨";
+    final String ARROW = "➜";
+
     //constructor for OrderController initialises services and scanner
     public OrderController() {
+        this.loginController = new LoginController();
+        this.loginService = new LoginService();
         this.orderService = new OrderService();
         this.categoryService = new CategoryService();
         this.productService = new ProductService();
@@ -32,63 +49,71 @@ public class OrderController {
      ● Visa orderhistorik för kunder
      */
     public void run() {
+        //At the moment only the customer can create an order but not the admin, this will need to be improved
+        System.out.println(BOLD + RED + ARROW + " To create an order you need to log in as a customer! " + ATTENTION + "\n" + RESET);
+        Customer customer = loginController.run();
+
         while (true) {
             try {
 
-                System.out.println("\n=== Orderhantering ===\n" +
-                "1. Skapa ny order\n" +
-                "2. Visa orderhistorik för kunder\n" +
-                "3. Avsluta\n" +
-                "Välj ett alternativ: ");
+                System.out.println("\n=== Orders ===\n" +
+                "1. Create new order\n" +
+                "2. Show order history to the customer\n" +
+                "0. Exit\n" +
+                "Choose an option:\n ");
 
-                // Läs användarens val
                 int select = scanner.nextInt();
 
-                // Hantera användarens val
                 switch (select) {
                     case 1:
                         //I use the categoryId to choose the product
                         categoryService.showAllCategoriesAsATable();//show all categories to the customer to choose
                         System.out.println("To create an order choose the product category (type the categoryId): \n");
                         int categoryId = scanner.nextInt();//categoryId validation required
-                        //to create the order it is necessary to choose the product and it's amount
-                        productService.showAllProductsByCaregoryIdAsATable(categoryId);//show all products from the category to choose
-                        //if there is 1 product in the category - ask amount, if there are 2 or more products - ask id and amount
+                        //if there is 1 product in the category - ask amount, if there are 2 or more products - ask product id and amount
                         ArrayList<Product> products = productService.AllProductsByCaregoryIdAsArrayList(categoryId);
                         if (products.size() == 1) {
+                            productService.showAllProductsByCaregoryIdAsATable(categoryId);//show all products from the category to choose
                             //to create the order I need product info
                             Product product = products.get(0);
-                            //1-take the quantity from user's input, 2-log in or ask at least user's id, 3-create the order, calculating its price (totalAmount)
+                            //1-take the quantity from user's input, 2-create the order, calculating its price (totalAmount)
                             System.out.println("Enter the quantity: ");
                             int quantity = scanner.nextInt();//quantity validation required
-                            //new order shoul be created with orderNumber, customerId, orderDate, productName, quantity, totalAmount
-                            //I need email to get customer's id
-                            System.out.println("Provide your email to log in");
-                            String email = scanner.next();//email validation required
-                            orderService.createNewOrder(email, product, quantity);
-
-
+                            //new order should be created with orderNumber, customerId, orderDate, productName, quantity, totalAmount
+                            orderService.createNewOrder(customer, product, quantity);
                         }else if (products.size() > 1) {
+                            productService.showAllProductsByCaregoryIdAsATable(categoryId);//show all products from the category to choose
                             System.out.println("Enter the product id: ");
+                            int productId = scanner.nextInt();//productId validation required
+                            //get the product by id
+                            products.forEach(product -> {
+                                product.getProductId();
+                                if (product.getProductId() == productId) {
+                                    System.out.println("Enter the quantity: ");
+                                    int quantity = scanner.nextInt();//quantity validation required
+                                    try {
+                                        orderService.createNewOrder(customer, product, quantity);
+                                    } catch (SQLException e) {
+                                        throw new RuntimeException(e);
+                                    }
+                                }});
+
                         }else{
                             System.out.println("We are sorry, but there are no products in this category");
                         }
-                        //multiple products can be selected at once and at the same time that amounts can be selected
                         break;
                     case 2:
-                        System.out.println("Enter customer's id: ");//it can be changed to enter customer's name/email
-                        int customerId = scanner.nextInt();
-                        orderService.showAllCustomersOrdersById(customerId);
+                        orderService.showAllCustomersOrdersByID(customer.getCustomerId());
                         break;
-                    case 3:
-                        System.out.println("Avslutar kundhantering...");
+                    case 0:
+                        System.out.println("Exit the program...");
                         return;
                     default:
-                        System.out.println("Ogiltigt val, försök igen");
+                        System.out.println("Wrong option. Try again.");
                 }
             } catch (Exception e) {
                 // Handle other errors (e.g. incorrect input)
-                System.out.println("Ett oväntat fel uppstod: " + e.getMessage());
+                System.out.println("An unexpected error occurred: " + e.getMessage());
                 scanner.nextLine();
             }
         }

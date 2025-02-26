@@ -31,6 +31,16 @@ public class Order {
         this.orderDate = orderDate;
     }
 
+    public Order(int orderId, int customerId, String orderDate, String name, int quantity, double totalAmount) {
+        this.orderNumber = orderId;
+        this.customerId = customerId;
+        this.orderDate = orderDate;
+        this.productName = name;
+        this.quantity = quantity;
+        this.totalAmount = totalAmount;
+
+    }
+
     //method to set the current time for orderDate, do not use it, because put it directly in the constructor
     public String setCurrentDateAsOrderDate() {
         LocalDateTime currentTime = LocalDateTime.now();

@@ -4,11 +4,15 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import customer.CustomerRepository;
+import login.LoginController;
 import order.OrderController;
 import customer.CustomerController;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
+
+        LoginController loginController = new LoginController();
+        //loginController.run();
 
         OrderController orderController = new OrderController();
         orderController.run();

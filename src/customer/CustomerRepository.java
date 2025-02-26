@@ -31,11 +31,13 @@ public class CustomerRepository {
             while (rs.next()) {
                 // Skapa ett nytt Customer-objekt från varje databasrad
                 Customer customer = new Customer(
-                        rs.getInt("customer_id"),     // Hämta ID från customer_id kolumnen
-                        rs.getString("first_name"),   // Hämta förnamn
-                        rs.getString("last_name"),    // Hämta efternamn
-                        rs.getString("email")         // Hämta email
-                );
+                        rs.getInt("customer_id"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("address"),
+                        rs.getString("password")
+                        );
                 customers.add(customer);
             }
         }
@@ -77,4 +79,27 @@ public class CustomerRepository {
         }
         return -1;
     }
+
+    public Customer getCustomerByEmail(String email) throws SQLException {
+        String sql = "SELECT * FROM customers WHERE email = ?";
+
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, email);
+
+            ResultSet rs = pstmt.executeQuery();
+
+            if (!rs.next()) {
+                return null;
+            }
+            return new Customer(rs.getInt("customer_id"),
+                                rs.getString("name"),
+                                rs.getString("email"),
+                                rs.getString("phone"),
+                                rs.getString("address"),
+                                rs.getString("password") );
+        }
+    }
+
 }

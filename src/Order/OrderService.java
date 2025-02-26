@@ -1,9 +1,11 @@
 package order;
 
+import customer.Customer;
 import customer.CustomerRepository;
 import product.Product;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class OrderService {
 
@@ -22,11 +24,12 @@ public class OrderService {
     }
 
     //new order should be created with orderNumber, customerId, orderDate, productName, quantity, totalAmount
-    public void createNewOrder(String email, Product product, int quantity) throws SQLException {
+    public void createNewOrder(Customer customer, Product product, int quantity) throws SQLException {
         CustomerRepository customerRepository = new CustomerRepository();
         Order order = new Order(
-                orderRepository.getMaxOrderId()+1,   //int orderNumber
-                customerRepository.getCustomerIdByEmail(email), //int customerId
+                orderRepository.getMaxOrderId()+1,//int orderNumber
+                customer.getCustomerId(),//int customerId
+                //customerRepository.getCustomerIdByEmail(email),
                 product.getProductName(),                       //String productName
                 quantity,                                       //int quantity
                 quantity*product.getProductPrice());            //double totalAmount
@@ -54,7 +57,29 @@ public class OrderService {
         System.out.println(sb);
     }
 
+    public void showAllCustomersOrdersByID(int id) throws SQLException {
+        ArrayList<Order> orders = orderRepository.getAllOrdersbyCustomerId(id);
+        if (!orders.isEmpty()) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("+-----------------+---------------------+-----------------+------------+------------+\n");
+            sb.append("|   Order number  |        Date         |      Product    |  Quantity  | Order price \n");
+            sb.append("+-----------------+---------------------+-----------------+------------+------------+\n");
 
+            for (Order order : orders) {
+                sb.append(String.format("| %15d | %16s | %15s | %10d |%10.2f \n",
+                        order.orderNumber,
+                        order.orderDate,
+                        order.getProductName(),
+                        order.getQuantity(),
+                        order.getTotalAmount()));
+            }
+            sb.append("+-----------------+---------------------+-----------------+------------+------------+\n");
+            sb.toString();
+            System.out.println(sb);
+        }else {
+            System.out.println("No customers orders found");
+        }
+    }
 
 
 }
