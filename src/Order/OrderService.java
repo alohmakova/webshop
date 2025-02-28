@@ -6,6 +6,7 @@ import product.Product;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class OrderService {
 
@@ -78,6 +79,22 @@ public class OrderService {
             System.out.println(sb);
         }else {
             System.out.println("No customers orders found");
+        }
+    }
+
+    public boolean validateQuantity(int quantity, Product product, Customer customer, Scanner scanner) throws SQLException {
+        while (true) {
+            if (quantity == 0) {
+                System.out.println("Oops... A quantity greater than zero must be entered");
+                System.out.println("Enter the quantity:\n");
+                quantity = scanner.nextInt();//validate that iser's input is int
+            } else if (quantity <= product.getStockQuantity()){
+                createNewOrder(customer, product, quantity);
+                return false;
+            } else {
+                System.out.println("There are only " + product.getStockQuantity() + " units of " + product.getProductName() + " left in stock");
+                return false;
+            }
         }
     }
 

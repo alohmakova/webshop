@@ -2,6 +2,7 @@ package category;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class CategoryService {
     //fields
@@ -36,5 +37,12 @@ public class CategoryService {
 
     public void showAllCategories() throws SQLException {
         System.out.println(categoryRepository.getAllCategories());
+    }
+
+    public int chooseCategory(Scanner scanner) throws SQLException {
+        showAllCategoriesAsATable();//show all categories to the customer to choose
+        System.out.println("To create an order choose the product category (type the categoryId): \n");
+        //categoryId validation required
+        return scanner.nextInt();//validate that iser's input is int
     }
 }
