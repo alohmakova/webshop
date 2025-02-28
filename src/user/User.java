@@ -1,4 +1,4 @@
-package util;
+package user;
 
 public abstract class User{
 

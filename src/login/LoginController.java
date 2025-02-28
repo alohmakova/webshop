@@ -1,6 +1,6 @@
 package login;
 
-import util.User;
+import user.User;
 import admin.Admin;
 import customer.Customer;
 
@@ -12,7 +12,14 @@ public class LoginController {
 
     LoginService loginService;
     Customer customer;
-    //Admin admin;
+    Admin admin;
+
+    final String RESET = "\u001B[0m";
+    final String PURPLE = "\u001b[38;5;171m";
+    final String PLEASE = "🙏";
+    final String ARROW = "➜";//
+    final String EMAIL = "✏\uFE0F";
+    final String PASSWORD = "\uD83D\uDD13";
 
 
     Scanner scanner;
@@ -21,11 +28,11 @@ public class LoginController {
 
         this.loginService = new LoginService();
         this.customer = null;
-        //this.admin = null;
+        this.admin = null;
         this.scanner = new Scanner(System.in);
     }
-
-    public Customer run() {
+    User user = null;
+    public User run() {
         boolean unlogged = true;
         while (unlogged) {
             try {
@@ -33,28 +40,30 @@ public class LoginController {
                 System.out.println("1. Log in as a customer");
                 System.out.println("2. Log in as an admin");
                 System.out.println("0. Exit");
-                System.out.print("Choose an option: ");
+                System.out.print(PURPLE + ARROW + " Choose an option " + PLEASE + RESET + "\n");
 
                 String select = scanner.nextLine();
 
                 switch (select) {
                     case "1":
-                        System.out.println("Enter email: ");
+
+                        System.out.println(PURPLE + ARROW + " Enter email " + EMAIL + RESET + "\n");
                         String email = scanner.nextLine();
-                        System.out.println("Enter password: ");
+                        System.out.println(PURPLE + ARROW + " Enter password " + PASSWORD + RESET + "\n");
                         String password = scanner.nextLine();
-                        Customer customer = loginService.loginAsCustomer(email, password);//из этого метода customer не сохраняется в метод run
-                            unlogged = false;
-                            return customer;
+                        user = loginService.loginAsCustomer(email, password);//из этого метода customer не сохраняется в метод run
+                        unlogged = false;
+                        return user;
+
 
                     case "2":
-                        System.out.println("Enter name: ");
+                        System.out.println(PURPLE + ARROW + " Enter name " + EMAIL + RESET + "\n");
                         String userName = scanner.nextLine();
-                        System.out.println("Enter password: ");
+                        System.out.println(PURPLE + ARROW + " Enter password " + PASSWORD + RESET + "\n");
                         String adminPassword = scanner.nextLine();
-                        loginService.loginAsAdmin(userName, adminPassword);
+                        user = loginService.loginAsAdmin(userName, adminPassword);
                         unlogged = false;
-                        return null;
+                        return user;
 
                     case "0":
                         System.out.println("Exit the program...");
@@ -71,6 +80,6 @@ public class LoginController {
                 scanner.nextLine(); // Clear the scanner buffer in case of a wrong input
             }
         }
-        return customer;
+        return user;
     }
 }

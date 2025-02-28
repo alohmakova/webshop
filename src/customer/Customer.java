@@ -1,9 +1,9 @@
 package customer;
 
 
-import util.User;
+import user.User;
 
-public class Customer {
+public class Customer extends User {
 
     // Privata fält för att uppnå inkapsling
     private int customerId;
@@ -14,6 +14,7 @@ public class Customer {
     private String password;
 
     public Customer(int customerId, String name, String email, String phone, String address, String password) {
+        super(customerId, email, password);
         this.customerId = customerId;
         this.name = name;
         this.email = email;

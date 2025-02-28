@@ -19,6 +19,8 @@ public class LoginService {
     // Unicode symboler
     final String CONGRATULATIONS = "🥳";
     final String CONFETTI = "🎉";
+    final String NO = "🛑✋🚷⛔";
+    final String NOTFOUND = "\uD83E\uDD37\u200D♂\uFE0F";
 
     public LoginService() {
         this.customerRepository = new CustomerRepository();
@@ -30,14 +32,14 @@ public class LoginService {
         Customer customer = customerRepository.getCustomerByEmail(email);
 
         if(customer == null){
-            System.out.println("No customer found");
+            System.out.println("Customer not found " + NOTFOUND + "\n");
         }
         else if(customer.getPassword().equals(password)){
             System.out.println(CONGRATULATIONS + BOLD + GREEN + " Welcome, " + customer.getName() + "! " + CONFETTI + "\n" + RESET);
             return customer;
         }
         else{
-            System.out.println("Wrong password");
+            System.out.println(NO + " Wrong password " + NO + "\n");
         }
         return null;
     }
@@ -46,14 +48,14 @@ public class LoginService {
         Admin admin = adminRepository.getAdminByUserName(name);
 
         if(admin == null){
-            System.out.println("No user found");
+            System.out.println("User not found " + NOTFOUND + "\n");
         }
         else if(admin.getPassword().equals(password)){
-            System.out.println("Congrats you've logged in");
+            System.out.println(CONGRATULATIONS + BOLD + GREEN + " Welcome, " + admin.getUserName() + "! " + CONFETTI + "\n" + RESET);
             return admin;
         }
         else{
-            System.out.println("Wrong password");
+            System.out.println(NO + " Wrong password " + NO + "\n");
         }
         return null;
 

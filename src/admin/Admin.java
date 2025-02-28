@@ -1,6 +1,6 @@
 package admin;
 
-import util.User;
+import user.User;
 
 public class Admin extends User {
 
