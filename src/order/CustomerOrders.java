@@ -2,6 +2,7 @@ package order;
 
 import customer.Customer;
 import product.Product;
+import stock.StockService;
 import user.User;
 
 import java.sql.SQLException;
@@ -10,6 +11,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class CustomerOrders implements OrderManager{
 
+    /**Orderhantering
+     ● Skapa nya ordrar
+     ● Visa orderhistorik för kunder
+     */
 
     @Override
     public void performActions(User user) {
@@ -26,7 +31,7 @@ public class CustomerOrders implements OrderManager{
                         PURPLE + ARROW + " Choose an option: "  + PLEASE + RESET + "\n");
 
                 int select = scanner.nextInt();//validate that iser's input is int
-                AtomicBoolean productQuantity = new AtomicBoolean(true);
+                AtomicBoolean needProductQuantity = new AtomicBoolean(true);
                 switch (select) {
                     case 1:
                         //I use the categoryId to choose the product
@@ -39,14 +44,15 @@ public class CustomerOrders implements OrderManager{
                             Product product = products.get(0);
                             //1-take the quantity from user's input, 2-create the order, calculating its price (totalAmount)
 
-                            while (productQuantity.get()) {
+                            while (needProductQuantity.get()) {
                             System.out.println(PURPLE + ARROW + " Enter the quantity: "  + PLEASE + RESET + "\n");
                             int quantity = scanner.nextInt();//validate that iser's input is int
-                                productQuantity.set(orderService.validateQuantity(quantity, product, customer, scanner));
+                                //boolean to run the loop if quantity provided by customer is not valid
+                                needProductQuantity.set(orderService.validateQuantityInput(quantity, product, customer, scanner));
                             }
                         } else if (products.size() > 1) {
 
-                            while (productQuantity.get()) {
+                            while (needProductQuantity.get()) {
                                 productService.showAllProductsByCaregoryIdAsATable(categoryId);//show all products from the category to choose
                                 System.out.println(PURPLE + ARROW + " Enter the product id " + PLEASE + RESET + "\n");
                                 int productId = scanner.nextInt();//validate that iser's input is int
@@ -57,7 +63,7 @@ public class CustomerOrders implements OrderManager{
                                         System.out.println(PURPLE + ARROW + " Enter the quantity: " + PLEASE + RESET + "\n");
                                         int quantity = scanner.nextInt();//quantity validation required
                                         try {
-                                            productQuantity.set(orderService.validateQuantity(quantity, product, customer, scanner));
+                                            needProductQuantity.set(orderService.validateQuantityInput(quantity, product, customer, scanner));
                                         } catch (SQLException e) {
                                             throw new RuntimeException(e);
                                         }
