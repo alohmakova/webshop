@@ -2,7 +2,6 @@ package order;
 
 import customer.Customer;
 import product.Product;
-import stock.StockService;
 import user.User;
 
 import java.sql.SQLException;
@@ -12,14 +11,17 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class CustomerOrders implements OrderManager{
 
     /**Orderhantering
-     ● Skapa nya ordrar
-     ● Visa orderhistorik för kunder
+     ✔️Skapa nya ordrar
+     ️ ✔️Visa orderhistorik för kunder
      */
+
+    boolean zeroInput = true;
+    Customer customer;
 
     @Override
     public void performActions(User user) {
 
-        Customer customer = (Customer)user;
+        customer = (Customer)user;
 
         while (true) {
             try {
@@ -31,7 +33,7 @@ public class CustomerOrders implements OrderManager{
                         PURPLE + ARROW + " Choose an option: "  + PLEASE + RESET + "\n");
 
                 int select = scanner.nextInt();//validate that iser's input is int
-                AtomicBoolean needProductQuantity = new AtomicBoolean(true);
+                //AtomicBoolean zeroInput = new AtomicBoolean(true);
                 switch (select) {
                     case 1:
                         //I use the categoryId to choose the product
@@ -43,32 +45,44 @@ public class CustomerOrders implements OrderManager{
                             //to create the order I need product info
                             Product product = products.get(0);
                             //1-take the quantity from user's input, 2-create the order, calculating its price (totalAmount)
-
-                            while (needProductQuantity.get()) {
-                            System.out.println(PURPLE + ARROW + " Enter the quantity: "  + PLEASE + RESET + "\n");
-                            int quantity = scanner.nextInt();//validate that iser's input is int
-                                //boolean to run the loop if quantity provided by customer is not valid
-                                needProductQuantity.set(orderService.validateQuantityInput(quantity, product, customer, scanner));
+                            zeroInput = true;
+                            while (zeroInput) {
+                                System.out.println(PURPLE + ARROW + " Enter the quantity: " + PLEASE + RESET + "\n");
+                                int quantity = scanner.nextInt();//validate that iser's input is int
+                                //boolean to run the loop if quantity provided by customer is 0 or less
+                                handleOrder(quantity, product);
                             }
                         } else if (products.size() > 1) {
-
-                            while (needProductQuantity.get()) {
+                            zeroInput = true;
+                            while (zeroInput) {
                                 productService.showAllProductsByCaregoryIdAsATable(categoryId);//show all products from the category to choose
                                 System.out.println(PURPLE + ARROW + " Enter the product id " + PLEASE + RESET + "\n");
                                 int productId = scanner.nextInt();//validate that iser's input is int
-                                //get the product by id
-                                products.forEach(product -> {
+
+                                /**products.forEach(product -> {
                                     product.getProductId();
                                     if (product.getProductId() == productId) {
                                         System.out.println(PURPLE + ARROW + " Enter the quantity: " + PLEASE + RESET + "\n");
                                         int quantity = scanner.nextInt();//quantity validation required
                                         try {
-                                            needProductQuantity.set(orderService.validateQuantityInput(quantity, product, customer, scanner));
+                                            handleOrder(quantity, product);
                                         } catch (SQLException e) {
                                             throw new RuntimeException(e);
                                         }
                                     }
-                                });
+                                });*/
+                                //get the product by id
+                                for (Product product : products) {
+                                    if (product.getProductId() == productId) {
+                                        System.out.println(PURPLE + ARROW + " Enter the quantity: " + PLEASE + RESET + "\n");
+                                        int quantity = scanner.nextInt(); // quantity validation required
+                                        try {
+                                            handleOrder(quantity, product);
+                                        } catch (SQLException e) {
+                                            throw new RuntimeException(e);
+                                        }
+                                    }
+                                }
                             }
                         } else {
                             System.out.println("We are sorry, but there are no products in this category");
@@ -92,4 +106,21 @@ public class CustomerOrders implements OrderManager{
         }
 
     }
+
+     /**Lagerhantering
+      ✔️Uppdatera lagersaldo för produkter (stock_quantity ska uppdateras efter order lagts)
+     ● Kontrollera lagerstatus (man ska inte kunna lägga till en produkt i en order om den inte finns på lager)
+     */
+    private void handleOrder(int quantity, Product product) throws SQLException {
+        zeroInput = orderService.validateQuantityInput(quantity, product);
+        if (!zeroInput && quantity <= product.getStockQuantity())
+        {
+            //create order
+            orderService.createNewOrder(customer, product, quantity);
+            //stock_quantity is updated after order placed
+            productService.reduceStockQuantity(product, quantity);
+        }
+    }
+
+
 }

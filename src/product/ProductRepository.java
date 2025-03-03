@@ -98,6 +98,7 @@ public class ProductRepository {
 
             pstmt.setInt(1, updatedQuantity);
             pstmt.setString(2, name);
+            pstmt.executeUpdate();
 
         }catch (Exception e) {
             e.printStackTrace();
