@@ -6,6 +6,7 @@ import product.Product;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class OrderService {
 
@@ -37,7 +38,7 @@ public class OrderService {
         orderRepository.addOrder(order);
         //save new order in the database in orders_products table
         orderRepository.insertIntoOrdersProducts(order, product);
-        //reduce the stock quantity of products when creating an order
+
 
         System.out.println("Thank you, order with the number " + order.orderNumber +" has been successfully created!\nOrder details: ");
         //show order details to the customer
@@ -78,6 +79,22 @@ public class OrderService {
             System.out.println(sb);
         }else {
             System.out.println("No customers orders found");
+        }
+    }
+
+    public boolean validateQuantityInput(int quantity, Product product) throws SQLException {
+        while (true) {
+            if (quantity <= 0) {
+                System.out.println("Oops... A quantity greater than zero must be entered");
+                System.out.println("Enter the quantity:\n");
+                return true;
+            } else if (quantity <= product.getStockQuantity()){
+                System.out.println("The product has enough stock and the order will be created");
+                return false;
+            } else {
+                System.out.println("There are only " + product.getStockQuantity() + " units of " + product.getProductName() + " left in stock");
+                return false;
+            }
         }
     }
 

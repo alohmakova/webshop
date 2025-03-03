@@ -1,5 +1,7 @@
 package product;
 
+import customer.Customer;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -38,5 +40,10 @@ public class ProductService {
 
     public ArrayList<Product> AllProductsByCaregoryIdAsArrayList(int id) throws SQLException {
         return productRepository.getProductsbyCategoryId(id);
+    }
+
+    public void reduceStockQuantity(Product product, int quantity) throws SQLException {
+        int newQuantity = product.getStockQuantity() - quantity;
+        productRepository.updatePruductsQuantity(product.getProductName(), newQuantity);
     }
 }
