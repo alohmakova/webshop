@@ -4,23 +4,14 @@ import admin.Admin;
 import admin.AdminRepository;
 import customer.*;
 import customer.CustomerRepository;
-
 import java.sql.SQLException;
+import static util.TextStyle.*;
 
 public class LoginService {
 
     CustomerRepository customerRepository;
     AdminRepository adminRepository;
-    // ANSI colours and formatting
-    final String GREEN = "\u001B[32m";
-    final String BOLD = "\u001B[1m";
-    final String RESET = "\u001B[0m";
-
-    // Unicode symboler
-    final String CONGRATULATIONS = "🥳";
-    final String CONFETTI = "🎉";
-    final String NO = "🛑✋🚷⛔";
-    final String NOTFOUND = "\uD83E\uDD37\u200D♂\uFE0F";
+    String wrongPass = NO.getStyle() + " Wrong password " + NO.getStyle() + "\n";
 
     public LoginService() {
         this.customerRepository = new CustomerRepository();
@@ -32,14 +23,14 @@ public class LoginService {
         Customer customer = customerRepository.getCustomerByEmail(email);
 
         if(customer == null){
-            System.out.println("Customer not found " + NOTFOUND + "\n");
+            System.out.println(BLUE.getStyle() + ARROW.getStyle() + " Customer not found " + NOTFOUND.getStyle() + "\n");
         }
         else if(customer.getPassword().equals(password)){
-            System.out.println(CONGRATULATIONS + BOLD + GREEN + " Welcome, " + customer.getName() + "! " + CONFETTI + "\n" + RESET);
+            System.out.println(CONGRATULATIONS.getStyle() + BOLD.getStyle() + GREEN.getStyle() + " Welcome, " + customer.getName() + "! " + CONFETTI.getStyle() + "\n" + RESET.getStyle());
             return customer;
         }
         else{
-            System.out.println(NO + " Wrong password " + NO + "\n");
+            System.out.println(wrongPass);
         }
         return null;
     }
@@ -48,14 +39,14 @@ public class LoginService {
         Admin admin = adminRepository.getAdminByUserName(name);
 
         if(admin == null){
-            System.out.println("User not found " + NOTFOUND + "\n");
+            System.out.println(BLUE.getStyle() + ARROW.getStyle() + " User not found " + NOTFOUND.getStyle() + "\n");
         }
         else if(admin.getPassword().equals(password)){
-            System.out.println(CONGRATULATIONS + BOLD + GREEN + " Welcome, " + admin.getUserName() + "! " + CONFETTI + "\n" + RESET);
+            System.out.println(CONGRATULATIONS.getStyle() + BOLD.getStyle() + GREEN.getStyle() + " Welcome, " + admin.getUserName() + "! " + CONFETTI.getStyle() + "\n" + RESET.getStyle());
             return admin;
         }
         else{
-            System.out.println(NO + " Wrong password " + NO + "\n");
+            System.out.println(wrongPass);
         }
         return null;
 

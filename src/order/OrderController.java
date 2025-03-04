@@ -5,7 +5,12 @@ import customer.Customer;
 import login.LoginController;
 import login.LoginService;
 import user.User;
+import static util.TextStyle.*;
 
+/**Orderhantering
+ ✔️ Skapa nya ordrar
+ ✔️ Visa orderhistorik för kunder
+ */
 
 public class OrderController {
 
@@ -15,25 +20,6 @@ public class OrderController {
 
     User user;
 
-    // ANSI colours and formatting
-    //To use the 256 color codes, your sequence will look like:
-    // "\u001b[38;5;<color code>m + output text" for text color
-    // "\u001b[48;5;<color code>m + output text" for background color
-    final String YELLOW = "\u001B[38;5;227m";//
-    final String RED = "\u001B[31m";
-    final String BLUE = "\u001B[34m";
-    final String BOLD = "\u001B[1m";
-    final String RESET = "\u001B[0m";
-
-
-
-    // Unicode symboler
-    final String ATTENTION = "🚨";
-    final String ARROW = "➜";
-    final String GOODBYE = "👋";
-    final String HEART = "💙";
-
-
     public OrderController() {
         this.loginController = new LoginController();
         this.loginService = new LoginService();
@@ -41,26 +27,32 @@ public class OrderController {
 
     }
 
-    /**Orderhantering
-     ● Skapa nya ordrar
-     ● Visa orderhistorik för kunder
-     */
     public void run() {
         //At the moment only the customer can create an order but not the admin, this will need to be improved
-        System.out.println(BOLD + BLUE + ARROW + " To create an order you need to log in as a customer! " + HEART + "\n" + RESET);
+        System.out.println (BOLD.getStyle() +
+                            BLUE.getStyle() +
+                            ARROW.getStyle() + " To create an order you need to log in as a customer! " +
+                            HEART.getStyle() + "\n" +
+                            RESET.getStyle());
         user = loginController.run();
         if (user == null) {
-            System.out.println(BOLD + YELLOW + ARROW + " Good bye!" + GOODBYE + "\n" + RESET);
+            //If I use this line, it is printed twice, because when I exit Orders, it is also printed
+            //System.out.println(TextStyle.BYE.getStyle());
         }else if (user instanceof Customer customer) {
             orderManager.performActions(customer);
         }else if (user instanceof Admin) {
             boolean userIsAdmin = true;
                 while(userIsAdmin) {
-                System.out.println(BOLD + RED + ATTENTION + " Admin can't create an order. To create an order you need to log in as a customer! " + ATTENTION + "\n" + RESET);
+                System.out.println (BOLD.getStyle() +
+                                    RED.getStyle() +
+                                    ATTENTION.getStyle() + " Admin can't create an order. To create an order you need to log in as a customer! " +
+                                    ATTENTION.getStyle() + "\n" +
+                                    RESET.getStyle());
                 user = loginController.run();
                     if (user == null) {
                         userIsAdmin = false;
-                        System.out.println(BOLD + YELLOW + ARROW + " Good bye!" + GOODBYE + "\n" + RESET);
+                        //If I use this line, it is printed twice, because when I exit Orders, it is also printed
+                        //System.out.println(TextStyle.BYE.getStyle());
                     }else if (user instanceof Customer customer) {
                     userIsAdmin = false;
                         orderManager.performActions(customer);
