@@ -5,8 +5,8 @@ import java.time.format.DateTimeFormatter;
 
 import customer.CustomerRepository;
 import login.LoginController;
-import order.OrderController;
 import customer.CustomerController;
+import order.OrderLoginController;
 
 public class Main {
     public static void main(String[] args) throws SQLException {
@@ -14,8 +14,8 @@ public class Main {
         LoginController loginController = new LoginController();
         //loginController.run();
 
-        OrderController orderController = new OrderController();
-        orderController.run();
+        OrderLoginController orderLoginController = new OrderLoginController();
+        orderLoginController.run();
 
         //CustomerController customerController = new CustomerController();
         //customerController.run();
