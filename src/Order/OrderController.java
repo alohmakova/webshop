@@ -7,7 +7,7 @@ import login.LoginService;
 import user.User;
 
 
-public class OrderLoginController {
+public class OrderController {
 
     LoginController loginController;
     LoginService loginService;
@@ -34,17 +34,17 @@ public class OrderLoginController {
     final String HEART = "💙";
 
 
-    public OrderLoginController() {
+    public OrderController() {
         this.loginController = new LoginController();
         this.loginService = new LoginService();
-        this.orderManager = new CustomerOrderController();
+        this.orderManager = new CustomerOrders();
 
     }
 
-    //To work with orders it is necessary to log in first
-    //You need to log in as a customer to create an order
-    //Right now it is not possible to work with orders like administrator
-    //You can also choose not to log in and exit the program
+    /**Orderhantering
+     ● Skapa nya ordrar
+     ● Visa orderhistorik för kunder
+     */
     public void run() {
         //At the moment only the customer can create an order but not the admin, this will need to be improved
         System.out.println(BOLD + BLUE + ARROW + " To create an order you need to log in as a customer! " + HEART + "\n" + RESET);

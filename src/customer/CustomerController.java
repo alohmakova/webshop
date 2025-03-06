@@ -1,7 +1,7 @@
 package customer;
-
 import java.sql.SQLException;
 import java.util.Scanner;
+import static util.TextStyle.*;
 
 /**
  * Applikationen ska struktureras i tre huvudsakliga lager:
@@ -35,10 +35,10 @@ public class CustomerController {
         while (true) {
             try {
                 // Skriv ut menyalternativ direkt i run-metoden för tydlighet
-                System.out.println("\n=== Kundhantering ===");
-                System.out.println("1. Visa alla kunder");
-                System.out.println("0. Avsluta");
-                System.out.print("Välj ett alternativ: ");
+                System.out.println("\n=== Customer management ===");
+                System.out.println("1. Show all customers");
+                System.out.println("0. Exit");
+                System.out.print(OPTION.getStyle());
 
                 /**Man behöver ändra Kundhantering enligt kraven i uppgiften:
                  ● Registrera nya kunder
@@ -46,19 +46,19 @@ public class CustomerController {
                  */
 
                 // Läs användarens val
-                int select = scanner.nextInt();
+                String select = scanner.nextLine();
 
                 // Hantera användarens val
                 switch (select) {
-                    case 1:
+                    case "1":
                         // Anropa service-lagret för att visa alla kunder
                         customerService.showAllUsers();
                         break;
-                    case 0:
+                    case "0":
                         System.out.println("Avslutar kundhantering...");
                         return;
                     default:
-                        System.out.println("Ogiltigt val, försök igen");
+                        System.out.println(WRONG_OPTION.getStyle());
                 }
             } catch (SQLException e) {
                 // Hantera databasfel

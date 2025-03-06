@@ -3,9 +3,10 @@ package login;
 import user.User;
 import admin.Admin;
 import customer.Customer;
-
+import util.TextStyle;
 import java.sql.SQLException;
 import java.util.Scanner;
+import static util.TextStyle.*;
 
 //validation of email/userName and password is required
 public class LoginController {
@@ -13,15 +14,6 @@ public class LoginController {
     LoginService loginService;
     Customer customer;
     Admin admin;
-
-    final String RESET = "\u001B[0m";
-    final String PURPLE = "\u001b[38;5;171m";
-    final String PLEASE = "🙏";
-    final String ARROW = "➜";//
-    final String EMAIL = "✏\uFE0F";
-    final String PASSWORD = "\uD83D\uDD13";
-
-
     Scanner scanner;
 
     public LoginController() {
@@ -40,16 +32,17 @@ public class LoginController {
                 System.out.println("1. Log in as a customer");
                 System.out.println("2. Log in as an admin");
                 System.out.println("0. Exit");
-                System.out.print(PURPLE + ARROW + " Choose an option " + PLEASE + RESET + "\n");
+                System.out.print(OPTION.getStyle());
 
                 String select = scanner.nextLine();
+                String askPassword = PURPLE.getStyle() + ARROW.getStyle() + " Enter password " + PASSWORD.getStyle() + RESET.getStyle() + "\n";
 
                 switch (select) {
                     case "1":
 
-                        System.out.println(PURPLE + ARROW + " Enter email " + EMAIL + RESET + "\n");
+                        System.out.println(PURPLE.getStyle() + ARROW.getStyle() + " Enter email " + EMAIL.getStyle() + RESET.getStyle() + "\n");
                         String email = scanner.nextLine();
-                        System.out.println(PURPLE + ARROW + " Enter password " + PASSWORD + RESET + "\n");
+                        System.out.println(askPassword);
                         String password = scanner.nextLine();
                         user = loginService.loginAsCustomer(email, password);//из этого метода customer не сохраняется в метод run
                         unlogged = false;
@@ -57,19 +50,19 @@ public class LoginController {
 
 
                     case "2":
-                        System.out.println(PURPLE + ARROW + " Enter name " + EMAIL + RESET + "\n");
+                        System.out.println(PURPLE.getStyle() + ARROW.getStyle() + " Enter name " + EMAIL.getStyle() + RESET.getStyle() + "\n");
                         String userName = scanner.nextLine();
-                        System.out.println(PURPLE + ARROW + " Enter password " + PASSWORD + RESET + "\n");
+                        System.out.println(askPassword);
                         String adminPassword = scanner.nextLine();
                         user = loginService.loginAsAdmin(userName, adminPassword);
                         unlogged = false;
                         return user;
 
                     case "0":
-                        System.out.println("Exit the program...");
+                        System.out.println(BYE.getStyle());
                         return null;
                     default:
-                        System.out.println("Incorrect option. Try again.");
+                        System.out.println(WRONG_OPTION.getStyle());
                 }
             } catch (SQLException e) {
                 // Handling a database error
