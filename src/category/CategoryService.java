@@ -1,4 +1,5 @@
 package category;
+import util.InvalidIDException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -39,10 +40,39 @@ public class CategoryService {
         System.out.println(categoryRepository.getAllCategories());
     }
 
+    //categoryId validation is done here
     public int chooseCategory(Scanner scanner) throws SQLException {
-        showAllCategoriesAsATable();//show all categories to the customer to choose
-        System.out.println("To create an order choose the product category (type the categoryId): \n");
-        //categoryId validation required
-        return scanner.nextInt();//validate that iser's input is int
+
+        System.out.println("To create an order choose the product category ➡️ type the categoryId from the list provided above👆⬆️☝️: \n");//ask to choose the category
+
+        //I get a list of all existing category id's
+        ArrayList<Category> categories = categoryRepository.getAllCategories();
+        ArrayList<Integer> categoriesID = new ArrayList<>();
+        categories.forEach(category -> categoriesID.add(category.getCategoryId()));
+
+        int categoryID;
+
+        try {
+            categoryID = Integer.parseInt(scanner.nextLine());//get the category id from the user
+            if(!categoriesID.contains(categoryID)){//in case the user enters an id that is not in the list
+                throw new InvalidIDException("Ooops... provided id doesn't exist in the list🤷‍♂️!");//I created my own exception
+            }
+        }catch (NumberFormatException e){//in case the user does not enter a number
+            System.out.println("Ooops... provided input doesn't look like id🤔!");
+
+            /**
+             * call return chooseCategory(scanner); is recursion.
+             * This means that the method calls itself
+             * ️️ ️1️⃣if the entered data is not a number ⃣or
+             * 2️⃣if the entered categoryID does not exist in the list of categories.
+             * Recursion is used to request input from the user again until a valid categoryID is entered.
+             * */
+
+            return chooseCategory(scanner);
+        } catch (InvalidIDException e) {
+            System.out.println(e.getMessage());
+            return chooseCategory(scanner);
+        }
+        return categoryID;
     }
 }

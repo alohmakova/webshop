@@ -33,12 +33,12 @@ public class OrderRepository {
         return ordersByCustomerId;
     }*/
     //I am changing Statement to PreparedStatement
-    public ArrayList<Order> getAllOrdersbyCustomerId(int customerId) throws SQLException {
+    public ArrayList<Order> getAllOrdersByCustomerId(int customerId) throws SQLException {
         ArrayList<Order> ordersByCustomerId = new ArrayList<>();
         String query = "select orders.order_id, orders.customer_id, orders.order_date, products.name, products.price, orders_products.quantity from orders " +
                 "join orders_products on orders.order_id = orders_products.order_id " +
                 "join products on orders_products.product_id = products.product_id " +
-                "where customer_id = ?";
+                "where customer_id = ? ORDER BY orders.order_date DESC LIMIT 10";
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -94,7 +94,7 @@ public class OrderRepository {
             pstmt.setInt(1, order.orderNumber);
             pstmt.setInt(2, product.getProductId());
             pstmt.setInt(3, order.quantity);
-            pstmt.setDouble(4, product.getProductPrice());
+            pstmt.setDouble(4, order.getTotalAmount()/order.getQuantity());//product.getProductPrice()
             pstmt.executeUpdate();
 
         }

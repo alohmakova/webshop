@@ -7,7 +7,7 @@ import login.LoginService;
 import user.User;
 
 
-public class OrderController {
+public class OrderLoginController {
 
     LoginController loginController;
     LoginService loginService;
@@ -34,10 +34,10 @@ public class OrderController {
     final String HEART = "💙";
 
 
-    public OrderController() {
+    public OrderLoginController() {
         this.loginController = new LoginController();
         this.loginService = new LoginService();
-        this.orderManager = new CustomerOrders();
+        this.orderManager = new CustomerOrderController();
 
     }
 

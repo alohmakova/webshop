@@ -1,9 +1,10 @@
 package product;
 
-import customer.Customer;
+import util.InvalidIDException;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class ProductService {
 
@@ -15,7 +16,7 @@ public class ProductService {
 
     //Check if we have any products to show - not implemented
     public void showAllProductsByCaregoryIdAsATable(int id) throws SQLException {
-        ArrayList<Product> products = productRepository.getProductsbyCategoryId(id);
+        ArrayList<Product> products = productRepository.getStockProductsByCategoryId(id);
         StringBuilder sb = new StringBuilder();
         sb.append("+------+------------------+----------+----------------+\n");
         sb.append("|  ID  |   Product name   |  Price   | Stock quantity |\n");
@@ -39,11 +40,36 @@ public class ProductService {
     }
 
     public ArrayList<Product> AllProductsByCaregoryIdAsArrayList(int id) throws SQLException {
-        return productRepository.getProductsbyCategoryId(id);
+        return productRepository.getStockProductsByCategoryId(id);
     }
 
-    public void reduceStockQuantity(Product product, int quantity) throws SQLException {
+    public void reduceStockQuantity(Product product, int quantity) {
         int newQuantity = product.getStockQuantity() - quantity;
         productRepository.updatePruductsQuantity(product.getProductName(), newQuantity);
+    }
+
+    public int chooseProduct(Scanner scanner) throws SQLException {
+        System.out.println("Enter the product id:");
+        //I get a list of all existing product id's
+        ArrayList<Product> products = productRepository.getAllProductsFromStock();
+        ArrayList<Integer> productsID = new ArrayList<>();
+        products.forEach(product -> productsID.add(product.getProductId()));
+
+        int productID;
+
+        try {
+            productID = Integer.parseInt(scanner.nextLine());//get the category id from the user
+            if(!productsID.contains(productID)){//in case the user enters an id that is not in the list
+                throw new InvalidIDException("Ooops... provided id doesn't exist in the list🤷‍♂️!");//I created my own exception
+            }
+        }catch (NumberFormatException e){//in case the user does not enter a number
+            System.out.println("Ooops... provided input doesn't look like id🤔!");
+
+            return chooseProduct(scanner);
+        } catch (InvalidIDException e) {
+            System.out.println(e.getMessage());
+            return chooseProduct(scanner);
+        }
+        return productID;
     }
 }
