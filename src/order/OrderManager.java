@@ -15,13 +15,5 @@ public interface OrderManager {
     ProductService productService = new ProductService();
 
 
-    TextStyle PURPLE = TextStyle.PURPLE;
-    TextStyle RESET = TextStyle.RESET;
-
-
-    TextStyle ARROW = TextStyle.ARROW;
-    TextStyle PLEASE = TextStyle.PLEASE;
-
-
     void performActions(User user);
 }

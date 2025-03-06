@@ -4,6 +4,7 @@ import customer.Customer;
 import product.Product;
 import user.User;
 import java.util.ArrayList;
+import static util.TextStyle.*;
 
 public class CustomerOrderController implements OrderManager{
 
@@ -14,7 +15,7 @@ public class CustomerOrderController implements OrderManager{
 
     /**Lagerhantering
      ✔️Uppdatera lagersaldo för produkter (stock_quantity ska uppdateras efter order lagts)
-     ● Kontrollera lagerstatus (man ska inte kunna lägga till en produkt i en order om den inte finns på lager):
+     ✔️Kontrollera lagerstatus (man ska inte kunna lägga till en produkt i en order om den inte finns på lager):
      In this case I have a choice -
      - not to show a product with 0 or less stock_quantity or
      - to show it, but not to let the customer order it.
@@ -22,7 +23,6 @@ public class CustomerOrderController implements OrderManager{
      I can show a product with 0 or less stock_quantity to an administrator, but not to a regular customer.
      */
 
-    boolean zeroInput = true;
     Customer customer;
 
 
@@ -38,7 +38,7 @@ public class CustomerOrderController implements OrderManager{
                         "1. Create new order\n" +
                         "2. Show order history\n" +
                         "0. Exit\n" +
-                        PURPLE + ARROW + " Choose an option: "  + PLEASE + RESET + "\n");
+                        OPTION.getStyle());
 
                 String select = scanner.nextLine();
 
@@ -61,11 +61,11 @@ public class CustomerOrderController implements OrderManager{
                          * */
 
                         if (products.size() == 1) {
-                            productService.showAllProductsByCaregoryIdAsATable(categoryId);
+                            productService.showAllProductsByCategoryIdAsATable(categoryId);
                             Product product = products.getFirst();//the product is automatically chosen because it is the only one
                             orderService.processOrder(product, customer);
                         } else if (products.size() > 1) {
-                            productService.showAllProductsByCaregoryIdAsATable(categoryId);
+                            productService.showAllProductsByCategoryIdAsATable(categoryId);
                             int productId = productService.chooseProduct(scanner);
                                 for (Product product : products) {
                                     if (product.getProductId() == productId) {//if the product id from user's input matches the id from the list from database
@@ -81,11 +81,10 @@ public class CustomerOrderController implements OrderManager{
                         orderService.showAllCustomersOrdersByID(customer.getCustomerId());
                         break;
                     case "0":
-                        System.out.println("Exit the program...");
-                        System.out.println(BOLD + YELLOW + ARROW + " Good bye!" + GOODBYE + "\n" + RESET);
+                        System.out.println(BYE.getStyle());
                         return;
                     default:
-                        System.out.println("Wrong option. Try again.");
+                        System.out.println(WRONG_OPTION.getStyle());
                         System.out.println("Please, provide the number 0, 1 or 2 instead of " + "\"" + select + "\"\n");
                 }
             } catch (Exception e) {

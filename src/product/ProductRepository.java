@@ -87,7 +87,7 @@ public class ProductRepository {
 
     ////Update stock balance for products (stock_quantity should be updated after order placed)
     //If a product is out of stock after creating an order, I don't remove it from the database, but do I want to display it to the customer or only to admin?
-    public void updatePruductsQuantity(String name, int updatedQuantity) {
+    public void updateProductsQuantity(String name, int updatedQuantity) {
 
         try(Connection conn = DatabaseConnection.getConnection();
             PreparedStatement pstmt = conn.prepareStatement(

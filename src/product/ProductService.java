@@ -15,7 +15,7 @@ public class ProductService {
     public ProductService() {this.productRepository = new ProductRepository();}
 
     //Check if we have any products to show - not implemented
-    public void showAllProductsByCaregoryIdAsATable(int id) throws SQLException {
+    public void showAllProductsByCategoryIdAsATable(int id) throws SQLException {
         ArrayList<Product> products = productRepository.getStockProductsByCategoryId(id);
         StringBuilder sb = new StringBuilder();
         sb.append("+------+------------------+----------+----------------+\n");
@@ -45,7 +45,7 @@ public class ProductService {
 
     public void reduceStockQuantity(Product product, int quantity) {
         int newQuantity = product.getStockQuantity() - quantity;
-        productRepository.updatePruductsQuantity(product.getProductName(), newQuantity);
+        productRepository.updateProductsQuantity(product.getProductName(), newQuantity);
     }
 
     public int chooseProduct(Scanner scanner) throws SQLException {

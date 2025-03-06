@@ -11,7 +11,7 @@ public class LoginService {
 
     CustomerRepository customerRepository;
     AdminRepository adminRepository;
-    String wrongPass = NO.getStyle() + " Wrong password " + NO.getStyle() + "\n";
+    String wrongPass = NO.getStyle() + " Wrong password " + NO.getStyle() + RESET.getStyle() + "\n";
 
     public LoginService() {
         this.customerRepository = new CustomerRepository();
@@ -23,10 +23,11 @@ public class LoginService {
         Customer customer = customerRepository.getCustomerByEmail(email);
 
         if(customer == null){
-            System.out.println(BLUE.getStyle() + ARROW.getStyle() + " Customer not found " + NOTFOUND.getStyle() + "\n");
+            System.out.println(BLUE.getStyle() + ARROW.getStyle() + " Customer not found " + NOTFOUND.getStyle() + RESET.getStyle() + "\n");
+            return null;
         }
         else if(customer.getPassword().equals(password)){
-            System.out.println(CONGRATULATIONS.getStyle() + BOLD.getStyle() + GREEN.getStyle() + " Welcome, " + customer.getName() + "! " + CONFETTI.getStyle() + "\n" + RESET.getStyle());
+            System.out.println(CONGRATULATIONS.getStyle() + BOLD.getStyle() + GREEN.getStyle() + " Welcome, " + customer.getName() + "! " + CONFETTI.getStyle() + "\n" + RESET.getStyle() + "\n");
             return customer;
         }
         else{
@@ -39,10 +40,11 @@ public class LoginService {
         Admin admin = adminRepository.getAdminByUserName(name);
 
         if(admin == null){
-            System.out.println(BLUE.getStyle() + ARROW.getStyle() + " User not found " + NOTFOUND.getStyle() + "\n");
+            System.out.println(BLUE.getStyle() + ARROW.getStyle() + " User not found " + NOTFOUND.getStyle() + RESET.getStyle() + "\n");
+            return null;
         }
         else if(admin.getPassword().equals(password)){
-            System.out.println(CONGRATULATIONS.getStyle() + BOLD.getStyle() + GREEN.getStyle() + " Welcome, " + admin.getUserName() + "! " + CONFETTI.getStyle() + "\n" + RESET.getStyle());
+            System.out.println(CONGRATULATIONS.getStyle() + BOLD.getStyle() + GREEN.getStyle() + " Welcome, " + admin.getUserName() + "! " + CONFETTI.getStyle() + "\n" + RESET.getStyle() + "\n");
             return admin;
         }
         else{
