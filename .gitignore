@@ -3,6 +3,12 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
+# SQLite databasfiler
+# *.db ignorerar alla filer som slutar med .db
+*.db
+webbutiken.db
+webshop.db
+
 ### Eclipse ###
 .apt_generated
 .classpath
