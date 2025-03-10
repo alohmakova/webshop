@@ -5,6 +5,8 @@ import admin.AdminRepository;
 import customer.*;
 import customer.CustomerRepository;
 import java.sql.SQLException;
+
+import static order.OrderController.scanner;
 import static util.TextStyle.*;
 
 public class LoginService {
@@ -31,7 +33,7 @@ public class LoginService {
             return customer;
         }
         else{
-            System.out.println(wrongPass);
+            System.err.println(wrongPass);
         }
         return null;
     }
@@ -51,6 +53,18 @@ public class LoginService {
             System.out.println(wrongPass);
         }
         return null;
+
+    }
+
+    public String askEmail() {
+        System.out.println(PURPLE.getStyle() + ARROW.getStyle() + " Enter email " + EMAIL.getStyle() + RESET.getStyle() + "\n");
+        String email = scanner.nextLine();
+        if (email.matches("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$")) {
+            //значит введенный email соответствует паттерну и можно продолжать
+            return email;
+        }
+        System.err.println("Incorrect email format. Try again");
+        return askEmail();
 
     }
 
