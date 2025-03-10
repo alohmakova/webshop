@@ -1,21 +1,16 @@
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
-import customer.CustomerRepository;
 import login.LoginController;
-import customer.CustomerController;
-import order.OrderLoginController;
+import order.OrderLogin;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, ClassNotFoundException {
 
         LoginController loginController = new LoginController();
         //loginController.run();
 
-        OrderLoginController orderLoginController = new OrderLoginController();
-        orderLoginController.run();
+        OrderLogin orderLogin = new OrderLogin();
+        orderLogin.run();
 
         //CustomerController customerController = new CustomerController();
         //customerController.run();

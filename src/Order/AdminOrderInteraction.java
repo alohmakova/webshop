@@ -4,23 +4,24 @@ import admin.Admin;
 import customer.Customer;
 import customer.CustomerRepository;
 import login.LoginService;
+import product.Product;
 import user.User;
 
 import java.sql.SQLException;
 
 import static util.TextStyle.*;
 
-public class AdminOrderController implements OrderWorkFlow {
+public class AdminOrderInteraction implements OrderController {
 
     LoginService loginService = new LoginService();
     CustomerRepository customerRepository = new CustomerRepository();
     Admin admin;
-    Customer customer = selectCustomer();
+    Customer customer;
 
     @Override
     public void selectOrderOption(User user) throws SQLException {
 
-        admin = (Admin)user;
+        admin = (Admin) user;
         while (true) {
             try {
 
@@ -33,48 +34,73 @@ public class AdminOrderController implements OrderWorkFlow {
                         OPTION.getStyle());
 
                 String select = scanner.nextLine();
-
+                //везде нужна валидация тогго, что пользователь с таким емейлом существует
+                //An unexpected error occurred: Cannot invoke "customer.Customer.getCustomerId()" because "customer" is null
                 switch (select) {
                     case "1":
-                        createOrder(customer);
+                        createOrder(selectCustomer());
                         break;
                     case "2":
+                        customer = selectCustomer();
                         orderService.showAllCustomersOrdersByID(customer.getCustomerId());
-                        orderService.deleteOrder(orderService.chooseOrder(scanner, customer.getCustomerId()));
+                        orderService.deleteOrder(orderService.chooseOrderId(scanner, customer));
                         orderService.showAllCustomersOrdersByID(customer.getCustomerId());
                         break;
                     case "3":
+                        customer = selectCustomer();
+                        //choose an order
+                        Order order = orderService.getOrder(customer);
+                        Product product = productService.extractProductFrom(order);
+                        System.out.println("You can change the quantity for the product " + product.getProductName() +
+                                ". There are " + product.getStockQuantity() +" units in stock\n");
+                        int quantity = orderService.chooseQuantityFor(product);
+                        orderService.changeOrder(customer.getCustomerId(), order, product, quantity);
 
-                        break;
-                    case "4":
-                        //good to add search by order history, e.g. by date, by product, by price, by category, by id
-                        orderService.showAllCustomersOrdersByID(customer.getCustomerId());
-                        break;
-                    case "0":
-                        System.out.println(BYE.getStyle());
-                        return;
-                    default:
-                        System.out.println(WRONG_OPTION.getStyle());
-                        System.out.println("Please, provide the number 0-4 instead of " + "\"" + select + "\"\n");
-                }
-            } catch (Exception e) {
-                // Handle other errors (e.g. incorrect input)
-                System.out.println("An unexpected error occurred: " + e.getMessage());
-                scanner.nextLine();
+                break;
+                case "4":
+                    //good to add search by order history, e.g. by date, by product, by price, by category, by id
+                    orderService.showAllCustomersOrdersByID(selectCustomer().getCustomerId());
+                    break;
+                case "0":
+                    System.out.println(BYE.getStyle());
+                    return;
+                default:
+                    System.out.println(WRONG_OPTION.getStyle());
+                    System.out.println("Please, provide the number 0-4 instead of " + "\"" + select + "\"\n");
             }
+        } catch(Exception e){
+            // Handle other errors (e.g. incorrect input)
+            System.err.println("An unexpected error occurred: " + e.getMessage());
+            scanner.nextLine();
+        }
+    }
         }
 
-    }
+    /** private Customer selectCustomer() {
 
-    private Customer selectCustomer() {
         try {
             System.out.println("Select a customer\n");
             return customerRepository.getCustomerByEmail(loginService.askEmail());
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (NullPointerException e)
+        {
+            System.out.println("Customer with this email " + email + " does not exist");
         }
         return null;
     }
+*/
+   private Customer selectCustomer() throws SQLException {
+       String email = null;
 
-
-}
+           System.out.println("Select a customer\n");
+           email = loginService.askEmail();
+           Customer customer = customerRepository.getCustomerByEmail(email);
+           if (customer == null) {
+               System.err.println("Customer with email " + email + " does not exist");
+              } else {
+                return customer;
+           }
+       return selectCustomer();
+   }
+   }

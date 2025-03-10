@@ -5,7 +5,7 @@ import user.User;
 
 import static util.TextStyle.*;
 
-public class CustomerOrderController implements OrderWorkFlow {
+public class CustomerOrderInteraction implements OrderController {
 
     /**Orderhantering
      ✔️Skapa nya ordrar
