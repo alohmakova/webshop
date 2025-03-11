@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import static order.OrderController.scanner;
+
 public class CategoryService {
     //fields
     CategoryRepository categoryRepository;
@@ -40,10 +42,9 @@ public class CategoryService {
         System.out.println(categoryRepository.getAllCategories());
     }
 
-    //categoryId validation is done here
     public int chooseCategory(Scanner scanner) throws SQLException {
 
-        System.out.println("To create an order choose the product category ➡️ type the categoryId from the list provided above👆⬆️☝️: \n");//ask to choose the category
+        System.out.println("Enter the category id:\n");//ask to choose the category
 
         //I get a list of all existing category id's
         ArrayList<Category> categories = categoryRepository.getAllCategories();
@@ -54,11 +55,12 @@ public class CategoryService {
 
         try {
             categoryID = Integer.parseInt(scanner.nextLine());//get the category id from the user
+            //categoryId validation
             if(!categoriesID.contains(categoryID)){//in case the user enters an id that is not in the list
                 throw new InvalidIDException("Ooops... provided id doesn't exist in the list🤷‍♂️!");//I created my own exception
             }
         }catch (NumberFormatException e){//in case the user does not enter a number
-            System.out.println("Ooops... provided input doesn't look like id🤔!");
+            System.err.println("Ooops... provided input doesn't look like id🤔!");
 
             /**
              * call return chooseCategory(scanner); is recursion.
@@ -75,4 +77,10 @@ public class CategoryService {
         }
         return categoryID;
     }
+
+    public int getCategoryId() throws SQLException {
+        showAllCategoriesAsATable();//I write this line separately so that the table is not displayed again for each incorrect input from the user
+        return chooseCategory(scanner);
+    }
+
 }

@@ -40,11 +40,10 @@ public class LoginController {
                 switch (select) {
                     case "1":
 
-                        System.out.println(PURPLE.getStyle() + ARROW.getStyle() + " Enter email " + EMAIL.getStyle() + RESET.getStyle() + "\n");
-                        String email = scanner.nextLine();
+                        String email = loginService.askEmail();
                         System.out.println(askPassword);
                         String password = scanner.nextLine();
-                        user = loginService.loginAsCustomer(email, password);//из этого метода customer не сохраняется в метод run
+                        user = loginService.loginAsCustomer(email, password);//из этого метода customer не сохраняЛся в метод run поэтому был NullPointerException
                         unlogged = false;
                         return user;
 

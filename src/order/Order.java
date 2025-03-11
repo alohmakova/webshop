@@ -1,56 +1,41 @@
 package order;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
+import java.util.Objects;
+import java.util.Random;
 
 public class Order {
 
     //fields
-    int orderNumber;
-    int customerId;
-    String orderDate;//I have changed the datatype from Date to String to avoid problems while setting current date and time as orderDate
-    String productName;
-    int quantity;
-    double totalAmount;//quantity*unit price
+    private int orderId;
+    private int customerId;
+    private String orderDate;
+    private String productName;
+    private int quantity;
+    private double totalAmount;//quantity*unit price
 
-    public Order (int orderNumber, int customerId, String productName, int quantity, double totalAmount) {
-        this.orderNumber = orderNumber;
+    public Order (int orderId, int customerId, String productName, int quantity, double totalAmount) {
+        this.orderId = orderId;
         this.customerId = customerId;
-        this.orderDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));;
+        this.orderDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         this.productName = productName;
         this.quantity = quantity;
         this.totalAmount = totalAmount;
     }
 
-    //constructor to show the order with the details only from orders table
-    public Order (int orderNumber, int customerId, String orderDate) {
-        this.orderNumber = orderNumber;
+    public Order(int orderId, int customerId, String orderDate, String productName, int quantity, double totalAmount) {
+        this.orderId = orderId;
         this.customerId = customerId;
         this.orderDate = orderDate;
-    }
-
-    public Order(int orderId, int customerId, String orderDate, String name, int quantity, double totalAmount) {
-        this.orderNumber = orderId;
-        this.customerId = customerId;
-        this.orderDate = orderDate;
-        this.productName = name;
         this.quantity = quantity;
+        this.productName = productName;
         this.totalAmount = totalAmount;
-
-    }
-
-    //method to set the current time for orderDate, do not use it, because put it directly in the constructor
-    public String setCurrentDateAsOrderDate() {
-        LocalDateTime currentTime = LocalDateTime.now();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return currentTime.format(formatter);
     }
 
     //getters
-    public int getOrderNumber() {
-        return orderNumber;
+    public int getOrderId() {
+        return orderId;
     }
     public int getCustomerId() {
         return customerId;
@@ -68,16 +53,27 @@ public class Order {
         return totalAmount;
     }
 
-
     @Override
     public String toString() {
         return "Order{" +
-                "orderNumber=" + orderNumber +
+                ", orderId=" + orderId +
                 ", customerId=" + customerId +
-                ", orderDate=" + orderDate +
+                ", orderDate='" + orderDate + '\'' +
+                ", productName='" + productName + '\'' +
+                ", quantity=" + quantity +
                 ", totalAmount=" + totalAmount +
                 '}';
     }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Order order = (Order) o;
+        return orderId == order.orderId;
+    }
 
-
+    @Override
+    public int hashCode() {
+        return Objects.hash(orderId);
+    }
 }
