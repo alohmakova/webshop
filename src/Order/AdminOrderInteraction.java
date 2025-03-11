@@ -93,14 +93,15 @@ public class AdminOrderInteraction implements OrderController {
    private Customer selectCustomer() throws SQLException {
        String email = null;
 
-           System.out.println("Select a customer\n");
+           System.out.println("Select a customer");
            email = loginService.askEmail();
            Customer customer = customerRepository.getCustomerByEmail(email);
            if (customer == null) {
-               System.err.println("Customer with email " + email + " does not exist");
+               System.err.println("\nCustomer with email " + email + " does not exist");
+               return selectCustomer();
               } else {
                 return customer;
            }
-       return selectCustomer();
+
    }
    }
