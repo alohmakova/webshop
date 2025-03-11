@@ -77,11 +77,6 @@ public class ProductService {
         return productRepository.getStockProductsByCategoryId(id);
     }
 
-    public void reduceStockQuantity(Product product, int quantity) {
-        int newQuantity = product.getStockQuantity() - quantity;
-        productRepository.updateProductsQuantity(product.getProductName(), newQuantity);
-    }
-
     public int chooseProduct(Scanner scanner) throws SQLException {
         System.out.println("Enter the product id:");
         //I get a list of all existing product id's
@@ -105,5 +100,20 @@ public class ProductService {
             return chooseProduct(scanner);
         }
         return productID;
+    }
+
+    public void reduceStockQuantity(Product product, int quantity) {
+        int newQuantity = product.getStockQuantity() - quantity;
+        productRepository.updateProductsQuantity(product.getProductName(), newQuantity);
+    }
+
+    public void updateStockQuantity(Product product, int newQuantity, int oldQuantity) {
+        if (newQuantity > oldQuantity){
+            int updatedQuantity = product.getStockQuantity() - (newQuantity-oldQuantity);
+            productRepository.updateProductsQuantity(product.getProductName(), updatedQuantity);
+        } else if (newQuantity < oldQuantity){
+            int updatedQuantity = product.getStockQuantity() + (oldQuantity-newQuantity);
+            productRepository.updateProductsQuantity(product.getProductName(), updatedQuantity);
+        }
     }
 }
