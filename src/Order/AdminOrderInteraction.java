@@ -42,9 +42,9 @@ public class AdminOrderInteraction implements OrderController {
                         break;
                     case "2":
                         customer = selectCustomer();
-                        orderService.showAllCustomersOrdersByID(customer.getCustomerId());
+                        orderService.showAllCustomersOrdersByID(customer);
                         orderService.deleteOrder(orderService.chooseOrderId(scanner, customer));
-                        orderService.showAllCustomersOrdersByID(customer.getCustomerId());
+                        orderService.showAllCustomersOrdersByID(customer);
                         break;
                     case "3":
                         customer = selectCustomer();
@@ -53,13 +53,12 @@ public class AdminOrderInteraction implements OrderController {
                         Product product = productService.extractProductFrom(order);
                         System.out.println("You can change the quantity for the product " + product.getProductName() +
                                 ". There are " + product.getStockQuantity() +" units in stock\n");
-                        int quantity = orderService.chooseQuantityFor(product);
-                        orderService.changeOrder(customer.getCustomerId(), order, product, quantity);
+                        orderService.changeOrder(product, order, customer);
 
-                break;
+                        break;
                 case "4":
                     //good to add search by order history, e.g. by date, by product, by price, by category, by id
-                    orderService.showAllCustomersOrdersByID(selectCustomer().getCustomerId());
+                    orderService.showAllCustomersOrdersByID(selectCustomer());
                     break;
                 case "0":
                     System.out.println(BYE.getStyle());
@@ -75,6 +74,8 @@ public class AdminOrderInteraction implements OrderController {
         }
     }
         }
+
+
 
     /** private Customer selectCustomer() {
 
