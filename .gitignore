@@ -5,6 +5,7 @@ out/
 
 # SQLite databasfiler
 # *.db ignorerar alla filer som slutar med .db
+resources/*
 *.db
 *.sqlite
 resources/webbutiken.db
