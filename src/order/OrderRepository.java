@@ -1,7 +1,11 @@
 package order;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 
 import product.Product;
 import util.DatabaseConnection;
@@ -37,9 +41,9 @@ public class OrderRepository {
      the query gives me orders with duplicated id's, because if the order has been changed, the table orders_products will have rows with duplicated id's
      HashSet<Order> gives me the possibility to display only unique records without duplicated id's to the customer
      **/
-    public HashSet<Order> getAllOrdersByCustomerId(int customerId) throws SQLException {
-        //ArrayList<Order> ordersByCustomerId = new ArrayList<>();
-        HashSet<Order> ordersByCustomerId = new HashSet<>();
+    public ArrayList<Order> getAllOrdersByCustomerId(int customerId) throws SQLException {
+        ArrayList<Order> ordersByCustomerId = new ArrayList<>();
+
         String query = "SELECT orders.order_id, orders.customer_id, orders.order_date, products.name, products.price, orders_products.quantity " +
                 "FROM orders " +
                 "LEFT JOIN orders_products ON orders.order_id = orders_products.order_id " +
@@ -74,13 +78,15 @@ public class OrderRepository {
      the query gives me orders with duplicated id's, because if the order has been changed, the table orders_products will have rows with duplicated id's
      HashSet<Order> gives me the possibility to display only unique records without duplicated id's to the customer
      **/
-    public HashSet<Order> getLimitedOrdersByCustomerId(int customerId) throws SQLException {
-        HashSet<Order> ordersByCustomerId = new HashSet<Order>();
+
+    public ArrayList<Order> getLimitedOrdersByCustomerId(int customerId) throws SQLException {
+        ArrayList<Order> ordersByCustomerId = new ArrayList<>();
         String query = "SELECT orders.order_id, orders.customer_id, orders.order_date, products.name, products.price, orders_products.quantity " +
                 "FROM orders " +
-                "LEFT JOIN orders_products ON orders.order_id = orders_products.order_id" +
-                "LEFT JOIN products ON orders_products.product_id = products.product_id" +
+                "LEFT JOIN orders_products ON orders.order_id = orders_products.order_id " +
+                "LEFT JOIN products ON orders_products.product_id = products.product_id " +
                 "WHERE customer_id = ? ORDER BY orders.order_date DESC LIMIT 10";
+
 
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -129,14 +135,17 @@ public class OrderRepository {
     }
 
     //save info about new order in the database in the orders_products table
-    public void insertIntoOrdersProducts(Order order, Product product) throws SQLException {
+    public void insertIntoOrdersProducts(Order order, Order order1, Product product) throws SQLException {
         String query = "INSERT INTO orders_products (order_id, product_id, quantity, unit_price) VALUES (?, ?, ?, ?)";
         try (Connection conn = DatabaseConnection.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
-            pstmt.setInt(1, order.getOrderId());
+            pstmt.setInt(1, order1.getOrderId());
             pstmt.setInt(2, product.getProductId());
             pstmt.setInt(3, order.getQuantity());
-            pstmt.setDouble(4, order.getTotalAmount() / order.getQuantity());//product.getProductPrice()
+            //without this rounding, the database gets a number like this 906.9900000000001 instead of 906.99
+            pstmt.setDouble(4, BigDecimal.valueOf(order.getTotalAmount() / order.getQuantity())
+                    .setScale(2, RoundingMode.HALF_UP)
+                    .doubleValue());//it was product.getProductPrice() before
             pstmt.executeUpdate();
 
         }

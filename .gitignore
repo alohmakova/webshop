@@ -7,9 +7,9 @@ out/
 # *.db ignorerar alla filer som slutar med .db
 *.db
 *.sqlite
-webbutiken.db
-webshop.db
-
+resources/webbutiken.db
+resources/webshop.db
+resources/webshop.log
 ### Eclipse ###
 .apt_generated
 .classpath
