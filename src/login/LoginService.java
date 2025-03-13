@@ -4,12 +4,16 @@ import admin.Admin;
 import admin.AdminRepository;
 import customer.*;
 import customer.CustomerRepository;
+import order.AdminOrderInteraction;
+import util.BaseLogger;
+
 import java.sql.SQLException;
+import java.util.logging.Logger;
 
 import static order.OrderController.scanner;
 import static util.TextStyle.*;
 
-public class LoginService {
+public class LoginService extends BaseLogger{
 
     CustomerRepository customerRepository;
     AdminRepository adminRepository;
@@ -58,12 +62,14 @@ public class LoginService {
 
     public String askEmail() {
         System.out.println(PURPLE.getStyle() + ARROW.getStyle() + " Enter email " + EMAIL.getStyle() + RESET.getStyle() + "\n");
+        logger.fine("The user enters e-mail ");
         String email = scanner.nextLine();
-        if (email.matches("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$")) {
-            //значит введенный email соответствует паттерну и можно продолжать
+        if (email.matches("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)+$")) {
+            logger.info("The entered email matches the regular expression pattern and is valid");
             return email;
         }
-        System.err.println("Incorrect email format. Try again");
+        System.out.println("Incorrect email format. Try again");
+        logger.warning("The email format was incorrect " + email + ", the user need to re-enter the email");
         return askEmail();
 
     }

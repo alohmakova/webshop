@@ -2,10 +2,13 @@ package order;
 
 import customer.Customer;
 import user.User;
+import util.BaseLogger;
+
+import java.util.logging.Level;
 
 import static util.TextStyle.*;
 
-public class CustomerOrderInteraction implements OrderController {
+public class CustomerOrderInteraction extends BaseLogger implements OrderController {
 
     /**Orderhantering
      ✔️Skapa nya ordrar
@@ -28,7 +31,9 @@ public class CustomerOrderInteraction implements OrderController {
     @Override
     public void selectOrderOption(User user) {
 
+
         customer = (Customer)user;
+        logger.info("The user is logged in as a customer");
 
         while (true) {
             try {
@@ -43,21 +48,27 @@ public class CustomerOrderInteraction implements OrderController {
 
                 switch (select) {
                     case "1":
+                        logger.fine("Customer selected option 1: create new order ");
                         createOrder(customer);
                         break;
                     case "2":
+                        logger.fine("Customer selected option 2: show order history ");
                         orderService.showLimitedCustomersOrdersByID(customer.getCustomerId());
                         break;
                     case "0":
+                        logger.fine("Customer selected option 0: exit the programme ");
                         System.out.println(BYE.getStyle());
+                        logger.fine("The programme must be restarted in order to return to work ");
                         return;
                     default:
+                        logger.fine("Customer made a mistake when selecting the menu option ");
                         System.out.println(WRONG_OPTION.getStyle());
                         System.out.println("Please, provide the number 0, 1 or 2 instead of " + "\"" + select + "\"\n");
                 }
             } catch (Exception e) {
-                // Handle other errors (e.g. incorrect input)
-                System.out.println("An unexpected error occurred: " + e.getMessage());
+                // Handle other errors
+                logger.log(Level.SEVERE, e.getMessage(), e);
+                System.err.println("An unexpected error occurred: press enter to continue working with orders or exit the programme ");
                 scanner.nextLine();
             }
         }

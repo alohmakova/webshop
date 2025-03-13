@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 public interface OrderController {
 
+
     Scanner scanner = new Scanner(System.in);
     OrderService orderService = new OrderService();
     CategoryService categoryService = new CategoryService();

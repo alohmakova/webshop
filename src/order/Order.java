@@ -24,6 +24,14 @@ public class Order {
         this.totalAmount = totalAmount;
     }
 
+    public Order (int customerId, String productName, int quantity, double totalAmount) {
+        this.customerId = customerId;
+        this.orderDate = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        this.productName = productName;
+        this.quantity = quantity;
+        this.totalAmount = totalAmount;
+    }
+
     public Order(int orderId, int customerId, String orderDate, String productName, int quantity, double totalAmount) {
         this.orderId = orderId;
         this.customerId = customerId;
