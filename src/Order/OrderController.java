@@ -24,25 +24,24 @@ public interface OrderController {
     default void createOrder(Customer customer) throws SQLException {
         //choose a category
         int categoryId = categoryService.getCategoryId();
+
         //choose a product from the category
         ArrayList<Product> products = productService.AllProductsByCaregoryIdAsArrayList(categoryId);
-        if (!products.isEmpty()) {
-            SelectProduct selectProduct = null;
-            if (products.size() == 1) {
-                selectProduct = new OneProductInCategory();
-            } else if (products.size() > 1) {
-                selectProduct = new ManyProductsInCategory();
-            } else {
-                System.err.println("We are sorry, but there are no products in this category. An order cannot be created.");
-            }
-            Product selectedProduct = selectProduct.selectProduct(categoryId, products);
-            //create an order
-            int quantity = orderService.chooseQuantityFor(selectedProduct);
-            orderService.newOrder(customer, selectedProduct, quantity);
-            productService.reduceStockQuantity(selectedProduct, quantity);
-        } else {
-            System.err.println("We are sorry, but there are no products in category " + categoryId + ". Select another category");
+
+        if (products.isEmpty()) {
+            System.err.println("We are sorry, but there are no products in category " + categoryId + ". Select another category.");
             createOrder(customer);
+            return;
         }
+
+        //ternary operator
+        SelectProduct selectProduct = (products.size() == 1) ? new OneProductInCategory() : new ManyProductsInCategory();
+        Product selectedProduct = selectProduct.selectProduct(categoryId, products);
+
+        //create an order
+        int quantity = orderService.chooseQuantityFor(selectedProduct);
+        orderService.newOrder(customer, selectedProduct, quantity);
+        productService.reduceStockQuantity(selectedProduct, quantity);
     }
+
 }

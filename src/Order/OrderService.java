@@ -9,8 +9,6 @@ import util.InvalidQuantityException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Scanner;
 import java.util.logging.Level;
 
 import static order.OrderController.productService;
@@ -70,9 +68,9 @@ public class OrderService extends BaseLogger{
 
     public ArrayList<Order> showAllCustomersOrdersByID(Customer customer) throws SQLException {
         ArrayList<Order> orders = orderRepository.getAllOrdersByCustomerId(customer.getId());
-        logger.fine("A HashSet<Order> orders was created to store all customer orders retrieved from the database");
+        logger.fine("A ArrayList<Order> orders was created to store all customer orders retrieved from the database");
         if (orders.isEmpty()) {
-            logger.warning("A HashSet<Order> orders is empty for the customer with email " + customer.getEmail());
+            logger.warning("ArrayList<Order> orders is empty for the customer with email " + customer.getEmail());
             System.out.println("No orders were found for the customer with email " + customer.getEmail());
         } else {
             System.out.println("All orders of the customer with email " + customer.getEmail());
@@ -83,9 +81,9 @@ public class OrderService extends BaseLogger{
     }
     public void showLimitedCustomersOrdersByID(int customerId) throws SQLException {
         ArrayList<Order> orders = orderRepository.getLimitedOrdersByCustomerId(customerId);
-        logger.fine("A HashSet<Order> orders was created to store last 10 customer orders retrieved from the database");
+        logger.fine("A ArrayList<Order> orders was created to store last 10 customer orders retrieved from the database");
         if (orders.isEmpty()) {
-            logger.warning("A HashSet<Order> orders is empty for the customer with with id " + customerId);
+            logger.warning("A ArrayList<Order> orders is empty for the customer with with id " + customerId);
             System.out.println("No orders were found ");
 
         } else {
