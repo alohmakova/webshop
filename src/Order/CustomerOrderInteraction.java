@@ -33,7 +33,6 @@ public class CustomerOrderInteraction extends BaseLogger implements OrderControl
 
 
         customer = (Customer)user;
-        logger.info("The user is logged in as a customer");
 
         while (true) {
             try {

@@ -4,7 +4,6 @@ import admin.Admin;
 import admin.AdminRepository;
 import customer.*;
 import customer.CustomerRepository;
-import user.User;
 import util.BaseLogger;
 
 import java.sql.SQLException;
@@ -74,11 +73,11 @@ public class LoginService extends BaseLogger{
         String userName = scanner.nextLine();
         if (userName.length() < 3) {
             logger.warning("Entered user name is too short: '" + userName + "'. The name must be at least 3 characters long");
-            System.out.println("Entered user name is too short. The name must be at least 3 characters long. Try again");
+            System.out.println("Entered user name is too short : '" + userName + "'. The name must be at least 3 characters long. Try again");
             return askUserName();
 
         }
-        logger.info("Entered user name is at least 3 characters long and is valid");
+        logger.info("Entered user name: '" + userName + "',  is at least 3 characters long and is valid");
         return userName;
     }
 
@@ -88,10 +87,10 @@ public class LoginService extends BaseLogger{
         String email = scanner.nextLine();
         if (!email.matches("^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)+$")) {
             System.out.println("Incorrect email format. Try again");
-            logger.warning("The email format was incorrect: '" + email + "'. The user need to re-enter the email");
+            logger.warning("The email format was incorrect: '" + email + "'. The user needs to re-enter the email");
             return askEmail();
         }
-        logger.info("Entered email matches the regular expression pattern and is valid");
+        logger.info("Entered email: '" + email + "', matches the regular expression pattern and is valid");
         return email;
 
     }

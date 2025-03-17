@@ -28,7 +28,6 @@ public class AdminOrderInteraction extends BaseLogger implements OrderController
 
 
         admin = (Admin) user;
-        logger.info("The user is logged in as an administrator");
         ArrayList<Order> orders;
         while (true) {
             try {
@@ -103,14 +102,14 @@ public class AdminOrderInteraction extends BaseLogger implements OrderController
        System.out.println("Select a customer");
        logger.fine("A customer's email is requested from the admin ");
            email = loginService.askEmail();
-       logger.fine("The system retrieves customer data from database using email");
+       logger.fine("The system retrieves customer data from database using email '" + email + "'");
            Customer customer = customerRepository.getCustomerByEmail(email);
            if (customer == null) {
                System.err.println("\nCustomer with email " + email + " does not exist");
                logger.warning("The email" + email + " does not exist in the database, a customer's email will be requested again ");
                return selectCustomer();
               } else {
-               logger.fine("The customer object will be created");
+               logger.fine("The user with the email '" + email + "' exists in the database. The customer object will be created");
                 return customer;
            }
 
