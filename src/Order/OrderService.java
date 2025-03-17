@@ -1,6 +1,7 @@
 package order;
 
 import customer.Customer;
+import filters.OrderFilters;
 import product.Product;
 import util.BaseLogger;
 import util.InvalidIDException;
@@ -297,8 +298,8 @@ public class OrderService extends BaseLogger{
             sb.toString();
             System.out.println(sb);
         } else {
-            System.err.println("No orders found");
-            logger.warning("A HashSet<Order> orders was empty");
+            System.out.println("No orders found");
+            logger.warning("An ArrayList<Order> orders was empty");
         }
     }
 
@@ -315,5 +316,21 @@ public class OrderService extends BaseLogger{
             return chooseOrder(customer, orders);
         }
     }
+
+    public void productNameFilter(Customer customer) throws SQLException {
+        ArrayList<Order> orders = orderRepository.getAllOrdersByCustomerId(customer.getCustomerId());
+        OrderFilters orderFilters = new OrderFilters();
+        System.out.println("Enter the product name to filter orders: ");
+        String searchString = scanner.nextLine();
+        //check for empty string protects against incorrect input from the user
+        if(searchString.matches("") || searchString.matches(" ")){
+            System.out.println("Invalid input. Please, try again");
+            productNameFilter(customer);
+            return;
+        }
+        ArrayList<Order> filteredOrders = orderFilters.filterOrdersByProductName(orders, searchString);
+        printOrders(filteredOrders);
+    }
+
 
 }
