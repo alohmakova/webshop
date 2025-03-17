@@ -28,15 +28,14 @@ public class OrderLogin {
      **/
 
     public void run() throws SQLException {
+            //do nothing if user== null, it means that the program will be finished
             user = loginController.run();
-            if (user == null) {
-                //if the user is not found, the program will be terminated
-            } else if (user instanceof Customer customer) {
-                orderController = new CustomerOrderInteraction();
-                orderController.selectOrderOption(customer);
-            } else if (user instanceof Admin admin) {
-                orderController = new AdminOrderInteraction();
-                orderController.selectOrderOption(admin);
-        }
+        if (user instanceof Customer customer) {
+            orderController = new CustomerOrderInteraction();
+            orderController.selectOrderOption(customer);
+        } else if (user instanceof Admin admin) {
+            orderController = new AdminOrderInteraction();
+            orderController.selectOrderOption(admin);
+    }
     }
 }

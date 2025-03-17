@@ -35,31 +35,25 @@ public class LoginController {
                 System.out.print(OPTION.getStyle());
 
                 String select = scanner.nextLine();
-                String askPassword = PURPLE.getStyle() + ARROW.getStyle() + " Enter password " + PASSWORD.getStyle() + RESET.getStyle() + "\n";
 
                 switch (select) {
                     case "1":
-
                         String email = loginService.askEmail();
-                        System.out.println(askPassword);
-                        String password = scanner.nextLine();
-                        user = loginService.loginAsCustomer(email, password);//из этого метода customer не сохраняЛся в метод run поэтому был NullPointerException
-                        unlogged = false;
-                        return user;
-
+                        user = loginService.loginAsCustomer(email);//password is asked inside the method loginAsCustomer() only if such user exists in the system
+                        unlogged = user == null;//start login() method again if the user== null
+                        //unlogged = (user != null) ? false : true;
+                        break;
 
                     case "2":
-                        System.out.println(PURPLE.getStyle() + ARROW.getStyle() + " Enter name " + EMAIL.getStyle() + RESET.getStyle() + "\n");
-                        String userName = scanner.nextLine();
-                        System.out.println(askPassword);
-                        String adminPassword = scanner.nextLine();
-                        user = loginService.loginAsAdmin(userName, adminPassword);
-                        unlogged = false;
-                        return user;
+                        String userName = loginService.askUserName();
+                        user = loginService.loginAsAdmin(userName);//password is asked inside the method loginAsCustomer() only if such user exists in the system
+                        unlogged = user == null;//start login() method again if the user== null
+                        break;
 
                     case "0":
+                        unlogged = false;//finish login() method, user== null
                         System.out.println(BYE.getStyle());
-                        return null;
+                        break;
                     default:
                         System.out.println(WRONG_OPTION.getStyle());
                 }
