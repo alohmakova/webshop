@@ -18,7 +18,6 @@ public interface OrderController {
     ProductService productService = new ProductService();
 
 
-
     void selectOrderOption(User user) throws SQLException;
 
     default void createOrder(Customer customer) throws SQLException {
@@ -43,5 +42,6 @@ public interface OrderController {
         orderService.newOrder(customer, selectedProduct, quantity);
         productService.reduceStockQuantity(selectedProduct, quantity);
     }
+
 
 }

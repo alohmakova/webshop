@@ -40,6 +40,7 @@ public class CustomerOrderInteraction extends BaseLogger implements OrderControl
                 System.out.println("\n=== Orders ===\n" +
                         "1. Create new order\n" +
                         "2. Show order history\n" +
+                        "3. Apply filter for order search\n" +
                         "0. Exit\n" +
                         OPTION.getStyle());
 
@@ -53,6 +54,10 @@ public class CustomerOrderInteraction extends BaseLogger implements OrderControl
                     case "2":
                         logger.fine("Customer selected option 2: show order history ");
                         orderService.showLimitedCustomersOrdersByID(customer.getCustomerId());
+                        break;
+                    case "3":
+                        logger.fine("Customer selected option 3: apply filter for order search ");
+                        orderService.productNameFilter(customer);
                         break;
                     case "0":
                         logger.fine("Customer selected option 0: exit the programme ");
