@@ -16,15 +16,15 @@ public class CategoryService {
         categoryRepository = new CategoryRepository();
     }
 
-    //Check if we have any сategories to show - not implemented
+
     public void showAllCategoriesAsATable() throws SQLException {
         ArrayList<Category> categories = categoryRepository.getAllCategories();
         StringBuilder sb = new StringBuilder();
         sb.append("+------------+--------------+\n");
         sb.append("| categoryId | categoryName |\n");
         sb.append("+------------+--------------+\n");
-        //I'm replacing the traditional for-each loop with a lambda
-        /*for (Category category : categories) {
+        /*I'm replacing the traditional for-each loop with a lambda
+        for (Category category : categories) {
             sb.append(String.format("| %-10d | %-12s |\n",
                     category.getCategoryId(),
                     category.getCategoryName()));
